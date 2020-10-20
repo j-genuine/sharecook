@@ -79,6 +79,14 @@
                 </div>
             @endif
 
+            <div class="links">
+            <br>
+            <br>
+            <a href="{{ url('/calender') }}" class="text-m text-gray-700 underline">Calender</a><br>
+            Worker: [<a href="{{ url('/workers/login') }}">Login</a>
+            <a href="{{ url('/workers/register') }}">Register</a>]
+            </div>
+
             <div class="content">
                 <div class="title m-b-md">
                     Laravel

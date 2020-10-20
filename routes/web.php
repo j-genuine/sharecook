@@ -18,3 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::prefix('workers')->namespace('Workers')->name('workers.')->group(function(){
+    Auth::routes();
+    Route::get('/home', 'WorkersHomeController@index')->name('workers_home');
+});
