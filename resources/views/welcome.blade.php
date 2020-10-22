@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>ShareCOOK -test-</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -79,23 +79,15 @@
                 </div>
             @endif
 
-            <div class="links">
-            <br>
-            <br>
-            <a href="{{ url('/calender') }}" class="text-m text-gray-700 underline">Calender</a><br>
-            Worker: [<a href="{{ url('/workers/login') }}">Login</a>
-            <a href="{{ url('/workers/register') }}">Register</a>]
-            </div>
-
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    ShareCOOK -test-
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
+                    <a href="/workerinfo">予約スケジュール表示</a>
+                    <a href="/workers/login">シェフログイン</a>
+                    <a href="/workers/register">シェフ登録</a>
                     <a href="https://blog.laravel.com">Blog</a>
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>

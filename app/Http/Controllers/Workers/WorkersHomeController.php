@@ -25,6 +25,8 @@ class WorkersHomeController extends Controller
      */
     public function index()
     {
-        return view('workers.home');
+        $worker = \Auth::user();
+
+        return view('workers.home', compact('worker'));
     }
 }
