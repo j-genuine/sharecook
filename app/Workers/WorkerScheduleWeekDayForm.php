@@ -9,7 +9,7 @@ use App\Calendar\WorkerSchedule;
 
 class WorkerScheduleWeekDayForm extends CalendarWeekDay {
 
-	public $workerSchedule = null; 
+	public  $workSchedule = null; 
 
 	/**
 	 * @return 
@@ -21,14 +21,15 @@ class WorkerScheduleWeekDayForm extends CalendarWeekDay {
 		//コメントのinputの名前
 		$comment_form_name = "worker_schedule[" . $this->carbon->format("Ymd") . "][comment]";
 
-		if(isset($this->workable_times)) print_r($this->workable_times);
+		//if(isset($this->workable_times)){ print_r($this->workSchedule);
+		//exit;}
 
 		//ランチ営業が選択されているかどうか
-		$isCheckedLunch = ($this->workerSchedule && $this->workerSchedule->isLunchOpen()) ? 'checked="checked"' : '';
+		$isCheckedLunch = ($this->workSchedule && $this->workSchedule->isLunchOpen()) ? 'checked="checked"' : '';
 		//ディナー営業が選択されているかどうか
-		$isCheckedDinner = ($this->workerSchedule && $this->workerSchedule->isDinnerOpen()) ? 'checked="checked"' : '';
+		$isCheckedDinner = ($this->workSchedule && $this->workSchedule->isDinnerOpen()) ? 'checked="checked"' : '';
 		//コメントの値
-		$comment = ($this->workerSchedule) ? $this->workerSchedule->comment : '';
+		$comment = ($this->workSchedule) ? $this->workSchedule->comment : '';
 		
 		//HTMLの組み立て
 		$html = [];

@@ -16,6 +16,8 @@ class WorkerScheduleController extends Controller
     
     public function form(Request $request){
 		
+		$worker_id = \Auth::id();
+		
 		//クエリーのdateを受け取る
 		$date = $request->input("date");
 
@@ -30,7 +32,7 @@ class WorkerScheduleController extends Controller
 		if(!$date)$date = time();
 		
 		//フォームを表示
-		$calendar = new WorkerScheduleFormView($date);
+		$calendar = new WorkerScheduleFormView($date, $worker_id);
 
 		return view('workers/worker_schedule_edit', [
 			"calendar" => $calendar
@@ -38,11 +40,13 @@ class WorkerScheduleController extends Controller
 	}
 	public function update(Request $request){
 	    
+	    $worker_id = \Auth::id();
+
 		$input = $request->get("worker_schedule");
 		$ym = $request->input("ym");
 		$date = $request->input("date");
 		
-		WorkerSchedule::updateWorkerScheduleWithMonth($ym, $input);
+		WorkerSchedule::updateWorkerScheduleWithMonth($ym, $input, $worker_id);
 		return redirect()
 			->action("Workers\WorkerScheduleController@form", ["date" => $date])
 			->withStatus("保存しました");

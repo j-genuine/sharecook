@@ -8,13 +8,13 @@ use App\Calendar\WorkerSchedule;
 
 class CalendarView {
 
-	const WORKER_ID = 1;	//テスト用
-
 	protected $carbon;
+	protected $worker_id;
 	protected $holidays = [];
 
-	function __construct($date){
+	function __construct($date, $worker_id){
 		$this->carbon = new Carbon($date);
+		$this->worker_id = $worker_id;
 	}
 	/**
 	 * タイトル
@@ -27,16 +27,16 @@ class CalendarView {
 	 * カレンダーを出力する
 	 */
 	function render(){
+
 		//HolidaySetting
 		//$setting = HolidaySetting::firstOrNew();
 		$setting = HolidaySetting::first();
 		if(!$setting)$setting = new HolidaySetting();
 		
 		$setting->loadHoliday($this->carbon->format("Y"));
-		//臨時営業日の読み込み
-		//$this->holidays = ExtraHoliday::getExtraHolidayWithMonth($this->carbon->format("Ym"));
+
 		//稼働可能フラグの読み込み
-		$this->workable_times = WorkerSchedule::getWorkerScheduleWithMonth($this->carbon->format("Ym"), CalendarView::WORKER_ID);
+		$this->workable_times = WorkerSchedule::getWorkerScheduleWithMonth($this->carbon->format("Ym"), $this->worker_id);
 
 		$html = [];
 		$html[] = '<div class="calendar">';

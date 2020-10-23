@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="/workerinfo">予約スケジュール表示</a>
+                    <a href="/workerinfo?wid=1">予約スケジュール表示</a>
                     <a href="/workers/login">シェフログイン</a>
                     <a href="/workers/register">シェフ登録</a>
                     <a href="https://blog.laravel.com">Blog</a>
