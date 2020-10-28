@@ -10,9 +10,11 @@ use App\Calendar\WorkerSchedule;
 
 class WorkerScheduleController extends Controller
 {
+    /*
     public function __construct(){
         $this->middleware('auth:workers');
     }
+    */
     
     public function form(Request $request){
 		

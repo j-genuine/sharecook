@@ -85,14 +85,9 @@
                 </div>
 
                 <div class="links">
-                    <a href="/workerinfo?wid=1">予約スケジュール表示</a>
+                    <a href="/workerslist">シェフ一覧</a>
                     <a href="/workers/login">シェフログイン</a>
                     <a href="/workers/register">シェフ登録</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
             </div>
         </div>

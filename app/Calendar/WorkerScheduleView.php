@@ -22,8 +22,9 @@ class WorkerScheduleView extends CalendarView {
 			
 			// ランチ・ディナー両方あれば2レコードあり
 			foreach($workable_times as $workable_time){
-				$reserveButton .= $workable_time->isLunchOpen() ? '<a href="#" class="badge badge-success">ランチ</a>' : '';
-				$reserveButton .= $workable_time->isDinnerOpen() ? '<a href="#" class="badge badge-primary">ディナー</a>' : '';
+				$reserveUrl = '/users/reserve/create?wsid='.$workable_time->id;
+				$reserveButton .= $workable_time->isLunchOpen() ? '<a href="'.$reserveUrl.'" class="badge badge-success">ランチ</a>' : '';
+				$reserveButton .= $workable_time->isDinnerOpen() ? '<a href="'.$reserveUrl.'" class="badge badge-primary">ディナー</a>' : '';
 				$reserveButton .= $workable_time->comment ? '<div class="small">' . e($workable_time->comment).'</div>' : "";
 			}
 		}

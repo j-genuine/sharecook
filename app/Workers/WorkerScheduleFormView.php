@@ -4,32 +4,12 @@ namespace App\Workers;
 use Carbon\Carbon;
 use App\Calendar\CalendarView;
 
-//use App\Calendar\WorkerSchedule;
 use App\Calendar\CalendarWeekDay;
 
 /**
 * 表示用
 */
 class WorkerScheduleFormView extends CalendarView {
-	/**
-	 * @return CalendarWeek
-	 */
-
-/*
-	protected function getWeek(Carbon $date, $index = 0){
-		$week = new WorkerScheduleWeekForm($date, $index);
-
-		//稼働可能日時を設定する
-		$start = $date->copy()->startOfWeek()->format("Ymd");
-		$end = $date->copy()->endOfWeek()->format("Ymd");
-
-		$week->workable_times = $this->workable_times->filter(function($value, $key) use($start, $end){
-			return $key >= $start && $key <= $end;
-		})->KeyBy("date_key");
-
-		return $week;
-	}
-*/
 
 	/**
 	 * 日を描画する

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">【シェフ会員】 {{ $worker->name }}さんのマイページ</div>
+                <div class="card-header">【シェフ会員】 {{ $worker->nickname }}さんのマイページ</div>
 
                 <div class="card-body">
                     @if (session('status'))

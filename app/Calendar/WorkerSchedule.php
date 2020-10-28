@@ -101,4 +101,21 @@ class WorkerSchedule extends Model
 			}
 		}
 	}
+	
+	/**
+     * シェフ会員テーブル(Workers)との連結
+     */
+    public function worker()
+    {
+        return $this->belongsTo(\App\Worker::class);
+    }
+
+    /**
+     * カスタマー予約テーブル(UserReservations)との連結
+     */
+    public function userReservation()
+    {
+        return $this->hasOne(\App\Users\UserReservation::class);
+    }
+
 }

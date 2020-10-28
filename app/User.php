@@ -36,4 +36,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    
+    /**
+     * カスタマー予約テーブル(UserReservations)との連結
+     */
+    public function userReservations()
+    {
+        return $this->hasMany(Users\UserReservation::class);
+    }
+    
 }

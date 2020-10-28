@@ -16,7 +16,7 @@ class Worker extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone',
+        'name', 'email', 'password', 'phone', 'nickname', 'price_lunch', 'price_dinner', 'amature_career', 'pro_career', 'portrait_filename', 'comment',
     ];
 
     /**
@@ -36,4 +36,14 @@ class Worker extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * 稼働スケジュールテーブル(workerSchedules)との連結
+     */
+    public function workerSchedules()
+    {
+        return $this->hasMany(Calendar\WorkerSchedule::class);
+    }
+
 }
