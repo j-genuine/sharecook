@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
    <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div class="col-md-10">
          <div class="card">
             {!! Form::open(['route' => ['users.reserve.destroy', $user_reservation->id], 'method' => 'delete']) !!}
             <div class="card-header">

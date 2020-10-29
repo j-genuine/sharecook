@@ -8,9 +8,9 @@ class UserReservation extends Model
 {
     protected $fillable = [
             'user_id', 'worker_schedule_id', 'visit_time', 'message', 'price',
-        ];
+    ];
 
-     /**
+    /**
      * カスタマー会員テーブル(Users)との連結
      */
     public function user()

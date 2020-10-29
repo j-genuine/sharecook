@@ -63,6 +63,11 @@ class UserReservationsController extends Controller
      */
     public function store(Request $request)
     {
+    	// 予約済みのidは不可
+		if( $request->user()->userReservations()->value("id") ){
+            return view('error', ["message" => '申し訳ございません。指定されたスケジュールは予約済みのため、お手続きができません。', "return_url" => "/home" ]);
+		}
+
         $request->validate([
             'message' => 'max:1000',
         ]);

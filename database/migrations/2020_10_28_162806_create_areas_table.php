@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriceToUserReservationsTable extends Migration
+class CreateAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddPriceToUserReservationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_reservations', function (Blueprint $table) {
-            $table->integer('price')->nullable();
+        Schema::create('areas', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamp('created_at')->useCurrent()->nullable();
         });
     }
 
@@ -25,8 +28,6 @@ class AddPriceToUserReservationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_reservations', function (Blueprint $table) {
-            $table->dropColumn('price');
-        });
+        Schema::dropIfExists('areas');
     }
 }

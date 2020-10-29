@@ -26,6 +26,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth']], function () {
     Route::prefix('users')->namespace('Users')->name('users.')->group(function(){
     	Route::resource('reserve', 'UserReservationsController', ['only' => ['create', 'store', 'edit', 'destroy' ]]);
+    
+        Route::get('/setting', 'UserSettingController@edit')->name("setting");
+        Route::post('/setting', 'UserSettingController@update')->name("setting_update");
     });
 });
 

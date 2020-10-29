@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">{{ $user->name }}さんのマイページ</div>
 
@@ -27,6 +27,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if (!$reservations)
+                            <tr><td colspan="6">現在、申し込み済みの予約はありません。</td></tr>
+                            @endif
+            
                             @foreach ($reservations as $key => $reservation)
                             <tr>
                                 <td>{{ $reservation['date_str'] }}</td>
@@ -45,10 +49,10 @@
                     <ul>
                         <li>お名前：{{ $user->name }}</li>
                         <li>メール：{{ $user->email }}</li>
-                        <li>住所：{{ $user->address }}</li>
+                        <li>住所：{{ $user->area()->value("name")." ".$user->address }}</li>
                         <li>電話番号：{{ $user->phone }}</li>
                     </ul>
-                    ⇒<a href="#">登録内容の変更</a><br />
+                    <a href="{{ route('users.setting') }}" class="btn btn-info">登録内容の変更</a><br />
                     ⇒<a href="{{ route('workerslist')}}">登録地域のシェフを探す</a>
                 </div>
             </div>

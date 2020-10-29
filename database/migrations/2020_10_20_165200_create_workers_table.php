@@ -20,6 +20,16 @@ class CreateWorkersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone',12);
+            
+            $table->integer('public_flag')->default(0);
+            $table->string('nickname');
+            $table->integer('price_lunch')->nullable();
+            $table->integer('price_dinner')->nullable();
+            $table->decimal('amature_career', 4, 1)->nullable();
+            $table->decimal('pro_career', 4, 1)->nullable();
+            $table->string('portrait_filename')->nullable();
+            $table->string('comment',2047)->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

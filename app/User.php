@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'address', 'phone',
+        'name', 'email', 'password', 'phone', 'zip_cd', 'area_id', 'address'
     ];
 
     /**
@@ -46,4 +46,11 @@ class User extends Authenticatable
         return $this->hasMany(Users\UserReservation::class);
     }
     
+    /**
+     * 地域名マスター(Areas)との連結
+     */
+    public function Area()
+    {
+        return $this->belongsTo(Area::class);
+    }
 }

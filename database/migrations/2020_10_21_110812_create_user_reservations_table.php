@@ -18,6 +18,7 @@ class CreateUserReservationsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('worker_schedule_id');
             $table->time('visit_time')->nullable();
+            $table->integer('price')->nullable();
             $table->string('message',1023)->nullable();
             $table->timestamps();
             

@@ -16,7 +16,7 @@ class Worker extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'nickname', 'price_lunch', 'price_dinner', 'amature_career', 'pro_career', 'portrait_filename', 'comment',
+        'name', 'email', 'password', 'public_flag', 'phone', 'nickname', 'price_lunch', 'price_dinner', 'amature_career', 'pro_career', 'portrait_filename', 'comment',
     ];
 
     /**
@@ -39,11 +39,27 @@ class Worker extends Authenticatable
 
 
     /**
-     * 稼働スケジュールテーブル(workerSchedules)との連結
+     * 稼働スケジュールテーブル(worker_schedules)との連結
      */
     public function workerSchedules()
     {
         return $this->hasMany(Calendar\WorkerSchedule::class);
+    }
+    
+    /**
+     * 出張可能エリアテーブル(worker_areas)との連結
+     */
+    public function workerAreas()
+    {
+        return $this->hasMany(Workers\WorkerArea::class);
+    }
+    
+    /**
+     * 得意スキルテーブル(worker_skills)との連結
+     */
+    public function workerSkills()
+    {
+        return $this->hasMany(Workers\WorkerSkill::class);
     }
 
 }
