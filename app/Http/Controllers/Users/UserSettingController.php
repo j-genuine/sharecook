@@ -21,9 +21,7 @@ class UserSettingController extends Controller
     {
         
         $user = \Auth::user();
-        
-        //dd($user->email."/".$request->email);
-        
+
         $request->validate([
 
             'name' => 'required|string|max:255',

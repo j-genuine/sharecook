@@ -20,6 +20,7 @@
                         <li>メール：{{ $worker->email }}</li>
                         <li>電話番号：{{ $worker->phone }}</li>
                     </ul>
+                    <a href="{{ route('workers.setting') }}" class="btn btn-info">プロフィール設定変更</a><br />
                     ⇒<a href="{{ route('workers.schedule_edit') }}">スケジュールの確認・登録</a>
                 </div>
             </div>
