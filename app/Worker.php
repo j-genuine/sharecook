@@ -61,5 +61,13 @@ class Worker extends Authenticatable
     {
         return $this->hasMany(Workers\WorkerSkill::class);
     }
+    
+    /**
+     * 料理画像テーブル(work_images)との連結
+     */
+    public function workImages()
+    {
+        return $this->hasMany(Workers\WorkImage::class);
+    }
 
 }

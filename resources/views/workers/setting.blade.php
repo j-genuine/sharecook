@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_workers')
 
 @section('content')
 <div class="container">
@@ -161,14 +161,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-5">
+                        <div class="form-group row mb-2">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    　更新　
+                                    プロフィール設定更新
                                 </button>
-                                <a href="/workers/home" class="btn btn-secondary">
-                                    　マイページにもどる　
-                                </a>
                             </div>
                         </div>
                     </form>
@@ -179,12 +176,9 @@
 
                             <div class="card-body">
                                 <div class="form-group row">
-                                    
-                                    
                                     <div class="col-md-4 text-md-center">
                                             {!! $portrait_img_tag !!}
                                     </div>
-                                    
                                     <div class="col-md-6">
                                         <input type="file" class="form-control-file" name="image" id="image">
                                         <input type="submit" class="btn btn-primary mt-3" value="画像を変更">
@@ -193,6 +187,7 @@
                             </div>
                         </div>
                     </form>
+                    <a href="{{ route('workers.workers_home') }}" class="btn btn-link"><i class="fas fa-angle-double-right"></i>マイページにもどる</a><br />
                 </div>
             </div>
         </div>

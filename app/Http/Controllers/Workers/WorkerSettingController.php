@@ -46,8 +46,7 @@ class WorkerSettingController extends Controller
         //プロフィール画像表示のimg要素を作成
         $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
 
-        $portrait_filename_info = pathinfo($worker->portrait_filename);
-        $public_id = $portrait_filename_info['filename'];
+        $public_id = (pathinfo($worker->portrait_filename))['filename'];
         $portrait_img_tag = $public_id ? $cloudinary->imageTag($this->portrait_folder."/".$public_id)->fill(150, 150)
             : '<img src="/image/portrait_dummy.png" />';
 
@@ -146,12 +145,12 @@ class WorkerSettingController extends Controller
         
         //POSTされたファイルの一時パス取得
         $image = $request->file('image');
-        if(!$image) return back();  //ファイルが空なら終了
+        if(!$image) return back()->withStatus("ファイルが選択されていません。");  //ファイルが空なら終了
         $image_name = $image->getRealPath();
+        if(!@getimagesize($image_name)) return back()->withStatus("画像ファイルを選択してください。");  //画像ファイルで無ければ終了
 
         //旧ファイルがある場合、削除と登録抹消
-        $current_filename = pathinfo($worker->portrait_filename);
-        $current_public_id = $current_filename['filename'];
+        $current_public_id = (pathinfo($worker->portrait_filename))['filename'];
         if( $current_public_id ){
             $cloudinary->uploadApi()->destroy($this->portrait_folder.'/'.$current_public_id);
             $worker->portrait_filename = "";
@@ -162,9 +161,8 @@ class WorkerSettingController extends Controller
         //Cloudinaryにアップロード
         $upload_image = $cloudinary->uploadApi()->upload($image_name, ['public_id' => $public_id, 'folder' => $this->portrait_folder]);
         
-        $upload_filename = basename($upload_image["url"]);
-        $worker->portrait_filename = "$upload_filename";
-        
+        $worker->portrait_filename = basename($upload_image["url"]);
+
         //DBに保存
         $worker->save();
 

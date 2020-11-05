@@ -48,6 +48,8 @@ Route::prefix('workers')->namespace('Workers')->name('workers.')->group(function
         Route::get('/setting', 'WorkerSettingController@edit')->name("setting");
         Route::post('/setting', 'WorkerSettingController@update')->name("setting_update");
         Route::post('/image_store', 'WorkerSettingController@storeImage')->name("image_store");
+        
+        Route::resource('work_images', 'WorkImagesController', ['only' => ['index', 'store', 'edit', 'update', 'destroy' ]]);
     });
 });
 
