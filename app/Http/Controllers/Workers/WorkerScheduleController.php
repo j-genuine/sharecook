@@ -10,15 +10,10 @@ use App\Calendar\WorkerSchedule;
 
 class WorkerScheduleController extends Controller
 {
-    /*
-    public function __construct(){
-        $this->middleware('auth:workers');
-    }
-    */
-    
+
     public function form(Request $request){
 		
-		$worker_id = \Auth::id();
+		$worker = \Auth::user();
 		
 		//クエリーのdateを受け取る
 		$date = $request->input("date");
@@ -34,10 +29,11 @@ class WorkerScheduleController extends Controller
 		if(!$date)$date = time();
 		
 		//フォームを表示
-		$calendar = new WorkerScheduleFormView($date, $worker_id);
+		$calendar = new WorkerScheduleFormView($date, $worker->id);
 
 		return view('workers/worker_schedule_edit', [
-			"calendar" => $calendar
+			"worker" => $worker,
+			"calendar" => $calendar,
 		]);
 	}
 	public function update(Request $request){

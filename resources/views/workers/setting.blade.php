@@ -28,6 +28,7 @@
                                 <label class="form-check-label" for="public_flag1">公開する</label>
                                 <input id="public_flag2" type="radio" class="form-check-input ml-2" name="public_flag" value="0" @if(!$worker->public_flag) checked @endif>
                                 <label class="form-check-label" for="public_flag2">公開しない</label>
+                                <small class="form-check-input ml-3">※★の項目が公開されます</small>
                             </div>
                         </div>
                         
@@ -40,7 +41,7 @@
                         </div>
 
                         <div class="form-group form-row">
-                            <label for="nickname" class="col-md-3 col-form-label text-md-right">ニックネーム</label>
+                            <label for="nickname" class="col-md-3 col-form-label text-md-right">★ニックネーム</label>
 
                             <div class="col-md-8">
                                 <input id="nickname" type="text" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ $worker->nickname }}" required autocomplete="nickname">
@@ -81,7 +82,7 @@
                         
                         <div class="h-adr">
                             <div class="form-group form-row">
-                            <label for="area_id" class="col-md-3 col-form-label text-md-right">出張可能エリア</label>
+                            <label for="area_id" class="col-md-3 col-form-label text-md-right">★出張可能エリア</label>
 
                                 <div class="col-md-2">
                                     第1希望:{{Form::select('area_ids[0]', $area_array, $area_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
@@ -96,7 +97,7 @@
                         </div>
 
                         <div class="form-group form-row">
-                            <label for="price" class="col-md-3 col-form-label text-md-right">希望謝礼額(￥)</label>
+                            <label for="price" class="col-md-3 col-form-label text-md-right">★希望謝礼額(￥)</label>
 
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
@@ -117,7 +118,7 @@
                         </div>
                         
                         <div class="form-group form-row">
-                            <label for="career" class="col-md-3 col-form-label text-md-right">料理経験(年数)</label>
+                            <label for="career" class="col-md-3 col-form-label text-md-right">★料理経験(年数)</label>
 
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
@@ -139,7 +140,7 @@
                         
                         <div class="h-adr">
                             <div class="form-group form-row">
-                            <label for="skill_id" class="col-md-3 col-form-label text-md-right">得意ジャンル</label>
+                            <label for="skill_id" class="col-md-3 col-form-label text-md-right">★得意ジャンル</label>
 
                                 <div class="col-md-2">
                                     1番目:{{Form::select('skill_ids[0]', $skill_array, $skill_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
@@ -154,7 +155,7 @@
                         </div>
                         
                         <div class="form-group form-row">
-                            <label for="comment" class="col-md-3 col-form-label text-md-right">PRコメント</label>
+                            <label for="comment" class="col-md-3 col-form-label text-md-right">★PRコメント</label>
 
                             <div class="col-md-8">
                                 <textarea id="comment" class="form-control @error('comment') is-invalid @enderror" name="comment" rows="3" autocomplete="comment">{{ $worker->comment }}</textarea>
@@ -177,7 +178,7 @@
                             <div class="card-body">
                                 <div class="form-group row">
                                     <div class="col-md-4 text-md-center">
-                                            {!! $portrait_img_tag !!}
+                                            {!! $worker->portraitImageTag() !!}
                                     </div>
                                     <div class="col-md-6">
                                         <input type="file" class="form-control-file" name="image" id="image">

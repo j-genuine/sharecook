@@ -3,8 +3,8 @@ namespace App\Workers;
 
 use Carbon\Carbon;
 use App\Calendar\CalendarView;
-
 use App\Calendar\CalendarWeekDay;
+use App\Users\UserReservation;
 
 /**
 * 表示用
@@ -21,8 +21,12 @@ class WorkerScheduleFormView extends CalendarView {
 
 		$isCheckedLunch = "";
 		$comment_lunch = "";
+		$lunch_disabled = "";
+		$lunch_reserved_icon = "";
 		$isCheckedDinner = "";
 		$comment_dinner = "";
+		$dinner_disabled = "";
+		$dinner_reserved_icon = "";
 
 		//checkboxの名前
 		$checkbox_lunch_name = "worker_schedule[" . $day->getDateKey() . "][lunch_flag]";
@@ -41,9 +45,18 @@ class WorkerScheduleFormView extends CalendarView {
 				if($workable_time->isLunchOpen()){
 					$isCheckedLunch = 'checked="checked"';
 					$comment_lunch = $workable_time->comment;
+					//予約があればフォーム無効化
+					if(UserReservation::find($workable_time->id)){
+						$lunch_disabled = "disabled";
+						$lunch_reserved_icon = '<i class="fas fa-clock"></i>';
+					}
 				}elseif($workable_time->isDinnerOpen()){
 					$isCheckedDinner = 'checked="checked"';
 					$comment_dinner = $workable_time->comment;
+					if(UserReservation::find($workable_time->id)){
+						$dinner_disabled = "disabled";
+						$dinner_reserved_icon = '<i class="fas fa-clock"></i>';
+					}
 				}
 			}
 		}
@@ -56,10 +69,10 @@ class WorkerScheduleFormView extends CalendarView {
 		//チェックボックスとコメント欄
 		//　※月前後の空白日は作成しない
 		if($td_style_class != "day-blank"){
-			$html[] = '<input type="checkbox" name="'. $checkbox_lunch_name . '" value="1" '. $isCheckedLunch. '>ランチ';
-			$html[] = '<input class="form-control form-control-sm" type="text" name="'.$comment_lunch_name.'" value="'.e($comment_lunch).'" maxlength="12" />';
-			$html[] = '<input type="checkbox" name="'. $checkbox_dinner_name . '" value="1" '. $isCheckedDinner. '>ディナー';
-			$html[] = '<input class="form-control form-control-sm" type="text" name="'.$comment_dinner_name.'" value="'.e($comment_dinner).'" maxlength="12" />';
+			$html[] = '<input type="checkbox" name="'. $checkbox_lunch_name . '" value="1" '.$isCheckedLunch.' '.$lunch_disabled.'>ランチ'.$lunch_reserved_icon;
+			$html[] = '<input class="form-control form-control-sm" type="text" name="'.$comment_lunch_name.'" value="'.e($comment_lunch).'" maxlength="12" '.$lunch_disabled.' />';
+			$html[] = '<input type="checkbox" name="'. $checkbox_dinner_name . '" value="1" '. $isCheckedDinner. ' '.$dinner_disabled.'>ディナー'.$dinner_reserved_icon;
+			$html[] = '<input class="form-control form-control-sm" type="text" name="'.$comment_dinner_name.'" value="'.e($comment_dinner).'" maxlength="12" '.$dinner_disabled.' />';
 		}
 
 		$html[] = '</td>';

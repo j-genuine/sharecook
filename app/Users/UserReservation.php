@@ -11,6 +11,17 @@ class UserReservation extends Model
     ];
 
     /**
+     * 指定のシェフ会員の予約情報を取得
+     * 
+     * @param  id    シェフ会員ID
+     * @return array 予約済み予約情報
+     */
+    static function workerReservedInfo($worker_id){
+        
+        return self::leftjoin('worker_schedules','worker_schedule_id','worker_schedules.id')->where('worker_id',$worker_id)->get();
+    }
+
+    /**
      * カスタマー会員テーブル(Users)との連結
      */
     public function user()

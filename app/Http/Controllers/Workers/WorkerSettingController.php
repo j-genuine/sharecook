@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Workers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Storage;
-use Cloudinary;
+use App\Worker;
 
 class WorkerSettingController extends Controller
 {
-
-    //プロフィール画像の保存先クラウド上のフォルダ名
-    public $portrait_folder = "portrait";
-    
     /**
      * シェフ会員プロフィール編集ページ
      */
@@ -43,20 +39,12 @@ class WorkerSettingController extends Controller
         //同様に全スキルIDとスキル名も
         $skill_array = \App\Skill::get()->pluck("name","id");
  
-        //プロフィール画像表示のimg要素を作成
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-
-        $public_id = (pathinfo($worker->portrait_filename))['filename'];
-        $portrait_img_tag = $public_id ? $cloudinary->imageTag($this->portrait_folder."/".$public_id)->fill(150, 150)
-            : '<img src="/image/portrait_dummy.png" />';
-
         return view('workers.setting', [
             'worker' => $worker,
             'area_ids' => $area_ids,
             'skill_ids' => $skill_ids,
             'area_array' => $area_array,
             'skill_array' => $skill_array,
-            'portrait_img_tag' => $portrait_img_tag,
         ]);
 
     }
@@ -73,10 +61,10 @@ class WorkerSettingController extends Controller
             'name' => 'required|string|max:255',
             'nickname' => 'required|string|max:255',
             'phone' => 'required|string|max:13',
-            'price_lunch' => 'integer|max:99999',
-            'price_dinner' => 'integer|max:99999',
-            'amature_career' => 'numeric|max:255',
-            'pro_career' => 'numeric|max:255',
+            'price_lunch' => 'nullable|integer|max:99999',
+            'price_dinner' => 'nullable|integer|max:99999',
+            'amature_career' => 'nullable|numeric|max:255',
+            'pro_career' => 'nullable|numeric|max:255',
             'comment' => 'max:2000',
         ]);
         
@@ -141,8 +129,7 @@ class WorkerSettingController extends Controller
     {
 
         $worker = \Auth::user();
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-        
+
         //POSTされたファイルの一時パス取得
         $image = $request->file('image');
         if(!$image) return back()->withStatus("ファイルが選択されていません。");  //ファイルが空なら終了
@@ -150,18 +137,14 @@ class WorkerSettingController extends Controller
         if(!@getimagesize($image_name)) return back()->withStatus("画像ファイルを選択してください。");  //画像ファイルで無ければ終了
 
         //旧ファイルがある場合、削除と登録抹消
-        $current_public_id = (pathinfo($worker->portrait_filename))['filename'];
-        if( $current_public_id ){
-            $cloudinary->uploadApi()->destroy($this->portrait_folder.'/'.$current_public_id);
+        if( $worker->portrait_filename ){
+            $worker->destroyPortraitImage();
             $worker->portrait_filename = "";
         }
-
-        //新規でpublic_id作成
-        $public_id = $worker->id."_".crc32(time());
-        //Cloudinaryにアップロード
-        $upload_image = $cloudinary->uploadApi()->upload($image_name, ['public_id' => $public_id, 'folder' => $this->portrait_folder]);
         
-        $worker->portrait_filename = basename($upload_image["url"]);
+        //アップロード処理
+        $worker->portrait_filename = Worker::uploadPortraitImage($image_name, $worker->id);
+        if(!$worker->portrait_filename) return back()->withStatus("サーバエラーにより保存できませんでした。");
 
         //DBに保存
         $worker->save();

@@ -1,0 +1,9 @@
+table.profile th {
+    text-align: right;
+	padding: 3px;
+}
+table.profile td {
+	text-align: left;
+	padding: 3px;
+}
+

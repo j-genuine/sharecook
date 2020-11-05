@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Cloudinary;
 
 class Worker extends Authenticatable
 {
@@ -37,6 +38,67 @@ class Worker extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    //プロフィール画像の保存先クラウド上のフォルダ名
+    public static $portrait_folder = "portrait";
+
+    /**
+     * Cloudinary用のpublic_idを取得
+     * 
+     * @return string
+     */
+    public function public_id()
+    {
+        return (pathinfo($this->portrait_filename))['filename'];
+    }
+
+    /**
+     * プロフィール画像表示html用のimg要素を取得
+     * 
+     * @param  integer $width=150, $height=150
+     * @return string
+     */
+    public function portraitImageTag($width=150, $height=150)
+    {
+        $public_id = $this->public_id();
+        //Public Idが無い(会員テーブルに登録が無い)場合は、ダミー画像のタグを返す
+        if(!$public_id) return '<img src="/image/portrait_dummy.png" width="'.$width.'" height='.$height.' />';
+        
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        return $cloudinary->imageTag(self::$portrait_folder."/".$public_id)->fill($width, $height);
+    }
+
+    /**
+     * プロフィール画像のアップロード処理
+     * 
+     * @param  画像ファイルのパス, 接頭文字
+     * @return string アップロードファイル名
+     */
+    static function uploadPortraitImage($image_file_path, $prefix="")
+    {
+        //新規でpublic_id作成
+        $public_id = $prefix."_".crc32(time());
+        
+        //Cloudinaryにアップロード
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        $upload_image = $cloudinary->uploadApi()->upload($image_file_path, ['public_id' => $public_id, 'folder' => self::$portrait_folder]);
+
+        return basename($upload_image["url"]);
+    }
+    
+    /**
+     * プロフィール画像の削除処理
+     * 
+     * @param  
+     * @return 
+     */
+    public function destroyPortraitImage()
+    {
+        //Cloudinaryから削除
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        $res = $cloudinary->uploadApi()->destroy(self::$portrait_folder.'/'.$this->public_id());
+
+        return $res;
+    }
 
     /**
      * 稼働スケジュールテーブル(worker_schedules)との連結

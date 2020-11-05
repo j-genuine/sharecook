@@ -27,7 +27,7 @@ class WorkerSchedule extends Model
 	}
 	
 	/**
-	 * 指定した月の営業・休業を取得する
+	 * 指定した月の稼働可能状況を取得する
 	 */
 	public static function getWorkerScheduleWithMonth($ym, $worker_id){
 		return WorkerSchedule::where([["date_key", 'like', $ym . '%'],["worker_id", "=", $worker_id]])
