@@ -20,7 +20,7 @@ class WorkersInfoController extends Controller
    		$workers = Worker::select("workers.id","nickname","portrait_filename")
    			->leftjoin("worker_skills","worker_skills.worker_id","workers.id")
    			->leftjoin("worker_areas","worker_areas.worker_id","workers.id")
-   			->where($sql_where_array)->groupBy("workers.id")->paginate(10);
+   			->where($sql_where_array)->groupBy("workers.id")->orderBy('workers.updated_at', 'desc')->paginate(10);
 
    		return view('workers_list', [
             'workers' => $workers,

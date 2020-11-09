@@ -22,13 +22,17 @@
                     <tr>
                         <th>エリア：</th>
                         <td>
-                        {{ $worker->workerAreas()->orderBy("priority_flag")->first()->Area()->value("name") }} 他
+                            @foreach ($worker->workerAreas()->orderBy("priority_flag")->get() as $worker_area)
+                                {{ $worker_area->Area()->value("name") }}
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
                         <th>ジャンル：</th>
                         <td>
-                        {{ $worker->workerSkills()->orderBy("priority_flag")->first()->Skill()->value("name") }} 他
+                            @foreach ($worker->workerSkills()->orderBy("priority_flag")->get() as $worker_skill)
+                                {{ $worker_skill->Skill()->value("name") }}
+                            @endforeach
                         </td>
                     </tr>
                 </table>
