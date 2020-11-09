@@ -1,3 +1,21 @@
+div#app{
+	background-image: url("/images/bg_1.png")
+}
+
+div.card{
+	margin: 10px 0px ;
+	border:2px solid #AADDBB;
+	border-radius: 10px;
+}
+
+div.card .card-header{
+	background: #DDFFEE;
+	color: #225533;
+	font-weight: bold;
+}
+
+
+
 table.profile th {
     text-align: right;
 	padding: 3px;
@@ -7,3 +25,11 @@ table.profile td {
 	padding: 3px;
 }
 
+table.profile_s th {
+    text-align: right;
+	padding: 1px;
+}
+table.profile_s td {
+	text-align: left;
+	padding: 1px;
+}

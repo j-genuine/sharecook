@@ -9,12 +9,8 @@
 
                 <div class="card-body">
                     @if (session('status'))
-                       <div class="alert alert-success" role="alert">
-                           {{ session('status') }}
-                       </div>
+                       <div class="alert alert-success" role="alert">{{ session('status') }}</div>
                     @endif
-                    
-                    {{-- エラーメッセージ --}}
                     @include('commons.error_messages')
                     
                     <form method="POST" action="{{ route('workers.setting_update') }}">
@@ -35,7 +31,7 @@
                         <div class="form-group form-row">
                             <label for="name" class="col-md-3 col-form-label text-md-right">名前</label>
 
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $worker->name }}" required autocomplete="name" autofocus>
                             </div>
                         </div>
@@ -43,7 +39,7 @@
                         <div class="form-group form-row">
                             <label for="nickname" class="col-md-3 col-form-label text-md-right">★ニックネーム</label>
 
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <input id="nickname" type="text" class="form-control @error('nickname') is-invalid @enderror" name="nickname" value="{{ $worker->nickname }}" required autocomplete="nickname">
                             </div>
                         </div>
@@ -75,7 +71,7 @@
                         <div class="form-group form-row">
                             <label for="phone" class="col-md-3 col-form-label text-md-right">電話番号</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $worker->phone }}" required autocomplete="phone">
                             </div>
                         </div>
@@ -85,13 +81,13 @@
                             <label for="area_id" class="col-md-3 col-form-label text-md-right">★出張可能エリア</label>
 
                                 <div class="col-md-2">
-                                    第1希望:{{Form::select('area_ids[0]', $area_array, $area_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
+                                    <span class="badge badge-pill badge-secondary">第１希望</span>{{Form::select('area_ids[0]', $area_array, $area_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
                                 </div>
                                 <div class="col-md-2">
-                                    第2希望:{{Form::select('area_ids[1]', $area_array, $area_ids[1], ['placeholder' => '---', 'class'  => 'form-control' ])}}
+                                    <span class="badge badge-pill badge-secondary">第２希望</span>{{Form::select('area_ids[1]', $area_array, $area_ids[1], ['placeholder' => '---', 'class'  => 'form-control' ])}}
                                 </div>
                                 <div class="col-md-2">
-                                    第3希望:{{Form::select('area_ids[2]', $area_array, $area_ids[2], ['placeholder' => '---', 'class'  => 'form-control' ])}}
+                                    <span class="badge badge-pill badge-secondary">第３希望</span>{{Form::select('area_ids[2]', $area_array, $area_ids[2], ['placeholder' => '---', 'class'  => 'form-control' ])}}
                                 </div>
                             </div>
                         </div>
@@ -143,13 +139,13 @@
                             <label for="skill_id" class="col-md-3 col-form-label text-md-right">★得意ジャンル</label>
 
                                 <div class="col-md-2">
-                                    1番目:{{Form::select('skill_ids[0]', $skill_array, $skill_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
+                                    <span class="badge badge-pill badge-secondary">１番目</span>{{Form::select('skill_ids[0]', $skill_array, $skill_ids[0], ['placeholder' => '---', 'class'  => 'form-control', 'required' ])}}
                                 </div>
                                 <div class="col-md-2">
-                                    2番目:{{Form::select('skill_ids[1]', $skill_array, $skill_ids[1], ['placeholder' => '---', 'class'  => 'form-control' ])}}
+                                    <span class="badge badge-pill badge-secondary">２番目</span>{{Form::select('skill_ids[1]', $skill_array, $skill_ids[1], ['placeholder' => '---', 'class'  => 'form-control' ])}}
                                 </div>
                                 <div class="col-md-2">
-                                    3番目:{{Form::select('skill_ids[2]', $skill_array, $skill_ids[2], ['placeholder' => '---', 'class'  => 'form-control' ])}}
+                                    <span class="badge badge-pill badge-secondary">３番目</span>{{Form::select('skill_ids[2]', $skill_array, $skill_ids[2], ['placeholder' => '---', 'class'  => 'form-control' ])}}
                                 </div>
                             </div>
                         </div>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Workers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Storage;
 use App\Worker;
 
 class WorkerSettingController extends Controller
@@ -58,8 +57,8 @@ class WorkerSettingController extends Controller
 
         $request->validate([
 
-            'name' => 'required|string|max:255',
-            'nickname' => 'required|string|max:255',
+            'name' => 'required|string|max:30',
+            'nickname' => 'required|string|max:12',
             'phone' => 'required|string|max:13',
             'price_lunch' => 'nullable|integer|max:99999',
             'price_dinner' => 'nullable|integer|max:99999',

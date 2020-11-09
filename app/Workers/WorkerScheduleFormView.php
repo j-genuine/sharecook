@@ -4,7 +4,6 @@ namespace App\Workers;
 use Carbon\Carbon;
 use App\Calendar\CalendarView;
 use App\Calendar\CalendarWeekDay;
-use App\Users\UserReservation;
 
 /**
 * 表示用
@@ -46,14 +45,14 @@ class WorkerScheduleFormView extends CalendarView {
 					$isCheckedLunch = 'checked="checked"';
 					$comment_lunch = $workable_time->comment;
 					//予約があればフォーム無効化
-					if(UserReservation::find($workable_time->id)){
+					if($workable_time->userReservation()->first()){
 						$lunch_disabled = "disabled";
 						$lunch_reserved_icon = '<i class="fas fa-clock"></i>';
 					}
 				}elseif($workable_time->isDinnerOpen()){
 					$isCheckedDinner = 'checked="checked"';
 					$comment_dinner = $workable_time->comment;
-					if(UserReservation::find($workable_time->id)){
+					if($workable_time->userReservation()->first()){
 						$dinner_disabled = "disabled";
 						$dinner_reserved_icon = '<i class="fas fa-clock"></i>';
 					}

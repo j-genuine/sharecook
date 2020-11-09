@@ -52,9 +52,16 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:30'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:workers'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'nickname' => ['required','string','max:12'],
+            'phone' => ['required','string','max:13'],
+            'price_lunch' => ['nullable','integer','max:99999'],
+            'price_dinner' => ['nullable','integer','max:99999'],
+            'amature_career' => ['nullable','numeric','max:255'],
+            'pro_career' => ['nullable','numeric','max:255'],
+            'comment' => ['max:2000'],
         ]);
     }
 
@@ -66,7 +73,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Worker::create([
+        $worker = Worker::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -78,13 +85,43 @@ class RegisterController extends Controller
             'pro_career' => $data['pro_career'],
             'comment' => $data['comment'],
         ]);
+        
+        //希望エリアID（出張可能エリアテーブルを更新）
+        $area_ids = array_unique($data['area_ids']); // 重複入力があれば、重複分の配列削除
+
+        $i=0;
+        foreach($area_ids as $area_id){
+            //地域名マスタにあるエリアIDであれば、レコード挿入
+            if( \App\Area::find($area_id) ) $worker->workerAreas()->create(['area_id' => $area_id, 'priority_flag' => $i]);
+            $i++;
+        }
+        
+        //得意スキルID（得意スキルテーブルを更新）
+        $skill_ids = array_unique($data['skill_ids']); // 重複入力があれば、重複分の配列削除
+
+        $i=0;
+        foreach($skill_ids as $skill_id){
+            //料理スキルマスタにあるスキルIDであれば、レコード挿入
+            if( \App\Skill::find($skill_id) ) $worker->workerSkills()->create(['skill_id' => $skill_id, 'priority_flag' => $i]);
+            $i++;
+        }
+        
+        return $worker;
     }
     
     /* RegisterUsers.phpのメソッドをworkers用に上書き */
     // view変更
     public function showRegistrationForm()
     {
-        return view('workers.auth.register');
+        //selectボックス用に全エリアIDとエリア名配列を作成
+        $area_array = \App\Area::get()->pluck("name","id");
+        //同様に全スキルIDとスキル名も
+        $skill_array = \App\Skill::get()->pluck("name","id");
+        
+        return view('workers.auth.register', [
+            'area_array' => $area_array,
+            'skill_array' => $skill_array,
+        ]);
     }
     // guard変更
     protected function guard(){

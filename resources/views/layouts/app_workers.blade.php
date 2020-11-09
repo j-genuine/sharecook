@@ -24,12 +24,12 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color:#337777;border-bottom:4px #CCEEEE solid;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                　シェフ会員
+                <span class="badge badge-light">シェフ会員</span>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -45,11 +45,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('workers.login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('workers.login') }}">ログイン</a>
                             </li>
                             @if (Route::has('workers.register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('workers.register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('workers.register') }}">シェフ会員登録</a>
                                 </li>
                             @endif
                         @else
@@ -62,7 +62,7 @@
                                     <a class="dropdown-item" href="{{ route('workers.logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        ログアウト
                                     </a>
 
                                     <form id="logout-form" action="{{ route('workers.logout') }}" method="POST" style="display: none;">
@@ -76,9 +76,14 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-0">
             @yield('content')
         </main>
+                <footer class="text-center p-2" style="color:#FFF;background-color:#337777;border-top:4px #CCEEEE solid;">
+            <p>
+            Copyright © ShareCOOK
+            </p>
+        </footer>
     </div>
 </body>
 </html>

@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'IndexController@index')->name('index');
 
 Route::get('/test', function () { return view('test');});
 Route::post('/test', 'TestController@postFile')->name("test_post");

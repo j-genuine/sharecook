@@ -3,7 +3,6 @@ namespace App\Calendar;
 use Carbon\Carbon;
 use App\Calendar\CalendarView;
 use App\Calendar\CalendarWeekDay;
-use App\Users\UserReservation;
 
 /**
 * 表示用
@@ -25,8 +24,7 @@ class WorkerScheduleView extends CalendarView {
 			// ランチ・ディナー両方あれば2レコードあり
 			foreach($workable_times as $workable_time){
 				$reserveUrl = '/users/reserve/create?wsid='.$workable_time->id;
-				//$user_reservation = UserReservation::where('worker_schedule_id',$workable_time->id)->first();
-				
+
 				//ランチ
 				if($workable_time->isLunchOpen()){
 					//予約が無ければリンク作成、あれば無効化

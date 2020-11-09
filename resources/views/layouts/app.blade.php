@@ -24,7 +24,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color:#338855;border-bottom:4px #FF6633 solid;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -41,14 +41,15 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="navbar-text">[シェフを予約]</li>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">ログイン</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">利用登録</a>
                                 </li>
                             @endif
                         @else
@@ -61,7 +62,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        ログアウト
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -75,10 +76,15 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-0">
 
             @yield('content')
         </main>
+        <footer class="text-center p-2" style="color:#FFF;background-color:#338855;border-top:4px #FF6633 solid;">
+            <p>
+            Copyright © ShareCOOK
+            </p>
+        </footer>
     </div>
 </body>
 </html>

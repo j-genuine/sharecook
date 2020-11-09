@@ -9,12 +9,23 @@ use App\Worker;
 
 class WorkersInfoController extends Controller
 {
-	public function index(){
-   	
-   		$workers = Worker::orderBy('updated_at', 'desc')->paginate(5);
-   		
+	public function index(Request $request){
+		
+   		$sql_where_array = array("public_flag" => 1);
+
+   		if($request->area_id) $sql_where_array["area_id"] = $request->area_id;
+   		if($request->skill_id) $sql_where_array["skill_id"] = $request->skill_id;
+
+   		//検索条件に合ったシェフ情報を取得   	
+   		$workers = Worker::select("workers.id","nickname","portrait_filename")
+   			->leftjoin("worker_skills","worker_skills.worker_id","workers.id")
+   			->leftjoin("worker_areas","worker_areas.worker_id","workers.id")
+   			->where($sql_where_array)->groupBy("workers.id")->paginate(10);
+
    		return view('workers_list', [
             'workers' => $workers,
+            'area_id' => $request->area_id,
+            'skill_id' => $request->skill_id,
         ]);
    	
 	}

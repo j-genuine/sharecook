@@ -7,8 +7,6 @@ use Cloudinary;
 
 class WorkImage extends Model
 {
-    //料理画像の保存先クラウド上のフォルダ名
-    public static $image_folder = "work_images";
     //最大画像保存数
     public static $max_image_num = 100;
     
@@ -34,8 +32,12 @@ class WorkImage extends Model
      */
     public function workImageTag($width=150, $height=150)
     {
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-        return $cloudinary->imageTag(self::$image_folder."/".$this->public_id())->fill($width, $height);
+        $public_id = $this->public_id();
+        //Public Idが無い(画像テーブルに登録が無い)場合は、ダミー画像のタグを返す
+        if(!$public_id) return '<img src="/images/work_image_dummy.png" width="'.$width.'" height='.$height.' />';
+        
+        $cloudinary = new Cloudinary(config('sharecook.cloudinary_url'));
+        return $cloudinary->imageTag(config('sharecook.work_image_folder')."/".$public_id)->fill($width, $height);
     }
     
     /**
@@ -60,8 +62,8 @@ class WorkImage extends Model
         $public_id = $prefix."_".md5(time());
         
         //Cloudinaryにアップロード
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-        $upload_image = $cloudinary->uploadApi()->upload($image_file_path, ['public_id' => $public_id, 'folder' => self::$image_folder]);
+        $cloudinary = new Cloudinary(config('sharecook.cloudinary_url'));
+        $upload_image = $cloudinary->uploadApi()->upload($image_file_path, ['public_id' => $public_id, 'folder' => config('sharecook.work_image_folder')]);
 
         return basename($upload_image["url"]);
     }
@@ -75,8 +77,8 @@ class WorkImage extends Model
     public function destroyWorkImage()
     {
         //Cloudinaryから削除
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-        $res = $cloudinary->uploadApi()->destroy(self::$image_folder.'/'.$this->public_id());
+        $cloudinary = new Cloudinary(config('sharecook.cloudinary_url'));
+        $res = $cloudinary->uploadApi()->destroy(config('sharecook.work_image_folder').'/'.$this->public_id());
 
         return $res;
     }
