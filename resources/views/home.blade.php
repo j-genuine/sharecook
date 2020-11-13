@@ -54,7 +54,7 @@
                         <li>電話番号：{{ $user->phone }}</li>
                     </ul>
                     <a href="{{ route('users.setting') }}" class="btn btn-info">登録内容の変更</a><br />
-                    <a href="/workerslist?area_id={{$user->area_id}}" class="btn btn-link"><i class="fas fa-angle-double-right"></i>>登録地域のシェフを探す</a>
+                    <a href="/workerslist?area_id={{$user->area_id}}" class="btn btn-link"><i class="fas fa-angle-double-right"></i> 登録地域のシェフを探す</a>
                 </div>
             </div>
         </div>

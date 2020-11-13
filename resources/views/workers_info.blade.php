@@ -36,8 +36,9 @@
    					<a class="btn btn-link float-right" href="{{ url('/workerinfo?date=' . $calendar->getNextMonth() . '&wid=' . $worker->id) }}"><i class="fas fa-caret-square-right"> 次の月</i></a>
                </h5>
                <p>
-                  [ランチ][ディナー]の表示がある日に予約できます。選択して確認画面にお進みください。<br />
+                  <span class="badge badge-success">ランチ　</span><span class="badge badge-primary">ディナー</span>の表示がある日に予約できます。選択して確認画面にお進みください。<br />
                   <i class="far fa-circle text-primary"></i>：予約ＯＫ <i class="fas fa-times text-danger"></i>：先約済み 
+                  @if( !\Auth::user() ) 　（<i class="fas fa-exclamation-circle text-danger">予約するには<a href="/login">ログイン</a>が必要です</i>） @endif
                </p>
             	{!! $calendar->render() !!}
 

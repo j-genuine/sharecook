@@ -33,7 +33,7 @@
                <br />
                <div class="form-group">
                {!! Form::label('cancel_reason', 'キャンセル理由') !!}：
-               {!! Form::textarea('cancel_reason', old('cancel_reason'), ['rows' => '3', 'maxlength' => '300', 'placeholder' => 'キャンセルされる理由を入力してください。（※シェフに通知されます）', 'class' => 'form-control'], 'required') !!}
+               {!! Form::textarea('cancel_reason', old('cancel_reason'), ['rows' => '3', 'maxlength' => '300', 'placeholder' => 'キャンセルされる理由を入力してください。（*シェフに通知されます）', 'class' => 'form-control', 'required']) !!}
                </div>
                {!! Form::hidden('worker_schedule_id', $worker_schedule->id) !!}
                {!! Form::hidden('date', $date_str) !!}

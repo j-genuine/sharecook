@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Workers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Worker;
 
 class WorkerSettingController extends Controller

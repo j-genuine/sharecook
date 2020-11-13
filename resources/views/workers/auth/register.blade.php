@@ -4,10 +4,21 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
+
             <div class="card">
                 <div class="card-header">シェフ会員登録</div>
 
                 <div class="card-body">
+                    <div class="row p-3" style="background:#FFFFEE;color:#990;">
+                        <div class="col-md-4 text-center"><img src="/images/chef_1.jpg" width="160"></div>
+                        <div class="col-md-8">
+                            あなたの時間を少しだけ使って、誰かのために、料理を作ってみませんか？<br/>
+                            謝礼と、そしてたくさんの笑顔がもらえます。<br/>
+                            <br/>
+                            料理人としての経験が無くても、情熱のある方ならどなたでも登録OKです。
+                        </div>
+                    </div>
+                    
                     @if (session('status'))
                        <div class="alert alert-success" role="alert">{{ session('status') }}</div>
                     @endif
