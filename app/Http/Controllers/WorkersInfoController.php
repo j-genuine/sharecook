@@ -17,7 +17,7 @@ class WorkersInfoController extends Controller
    		if($request->skill_id) $sql_where_array["skill_id"] = $request->skill_id;
 
    		//検索条件に合ったシェフ情報を取得   	
-   		$workers = Worker::select("workers.id","nickname","portrait_filename")
+   		$workers = Worker::select("workers.id","nickname","price_lunch","price_dinner","portrait_filename")
    			->leftjoin("worker_skills","worker_skills.worker_id","workers.id")
    			->leftjoin("worker_areas","worker_areas.worker_id","workers.id")
    			->where($sql_where_array)->groupBy("workers.id")->orderBy('workers.updated_at', 'desc')->paginate(10);
@@ -34,10 +34,15 @@ class WorkersInfoController extends Controller
 	
 		// クエリからworker_idと年月を受け取る
 		$worker_id = $request->wid;
-		$date = $request->input("date");
+		$date = $request->date;
 
 		// worker_idがあればインスタンス生成
 		$worker = Worker::findOrFail($worker_id);
+		
+		// 料理画像インスタンス生成
+		$work_images = $worker->workImages()->orderBy("created_at","desc")->paginate(3);
+		// ページネーション
+		$image_page_links = $work_images->appends(['wid' => $worker_id, 'date' => $date])->links();
 	
 		//dateがYYYY-MMの形式かどうか判定する
 		if($date && preg_match("/^[0-9]{4}-[0-9]{2}$/", $date)){
@@ -54,7 +59,9 @@ class WorkersInfoController extends Controller
 
 		return view('workers_info', [
 			"calendar" => $calendar,
-			"worker" => $worker
+			"worker" => $worker,
+			"work_images" => $work_images,
+			"image_page_links" => $image_page_links,
 		]);
 	}
 }

@@ -27,7 +27,7 @@
         <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color:#338855;border-bottom:4px #FF6633 solid;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img src="/images/logo.png" style="vertical-align:top;" alt="{{ config('app.name', 'ShareCOOK') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -41,9 +41,10 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <li class="navbar-text">[シェフを予約]</li>
+                        
                         <!-- Authentication Links -->
                         @guest
+                            <li class="navbar-text">[シェフを予約]</li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">ログイン</a>
                             </li>
@@ -53,6 +54,7 @@
                                 </li>
                             @endif
                         @else
+                            <li class="mt-2 mr-2"><a href="/home" class="btn btn-outline-success btn-sm text-white-50"><i class="fas fa-home"></i>マイページ</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -80,10 +82,18 @@
 
             @yield('content')
         </main>
-        <footer class="text-center p-2" style="color:#FFF;background-color:#338855;border-top:4px #FF6633 solid;">
-            <p>
-            Copyright © ShareCOOK
-            </p>
+        <footer>
+            <div id="footer_navi">
+                <ul class="nav justify-content-center">
+                    <li><a href="/">トップページ</a></li>
+                    <li><a href="/workerslist">シェフ一覧</a></li>
+                    <li><a href="/register">利用登録</a></li>
+                    <li><a href="/workers/register">シェフ会員登録</a></li>
+                    <li><a href="/terms">利用規約</a></li>
+                    <li><a href="/inquiry">お問い合わせ</a></li>
+                </ul>
+            </div>
+            <small>&copy; {{ date("Y") }} ShareCOOK</small>
         </footer>
     </div>
 </body>

@@ -16,6 +16,10 @@ Route::get('/', 'IndexController@index')->name('index');
 Route::get('/test', function () { return view('test');});
 Route::post('/test', 'TestController@postFile')->name("test_post");
 
+Route::get('/terms', function () { return view('terms');});
+Route::get('/inquiry', 'InquiryController@form')->name('inquiry');
+Route::post('/inquiry', 'InquiryController@send')->name('inquiry.send');
+
 Route::get('/workerinfo', 'WorkersInfoController@show')->name('workerinfo');
 Route::get('/workerslist', 'WorkersInfoController@index')->name('workerslist');
 

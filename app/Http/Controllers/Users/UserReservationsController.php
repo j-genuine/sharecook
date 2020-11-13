@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 use App\Calendar\WorkerSchedule;
-//use App\Worker;
 use App\User;
 use App\Users\UserReservation;
 
@@ -30,30 +30,21 @@ class UserReservationsController extends Controller
             return view('error', ["message" => '申し訳ございません。指定されたスケジュールは予約済みのため、お手続きができません。', "return_url" => "/workerinfo?wid=".$worker_schedule->worker_id ]);
 		}
 		
-		//予約日を成型
-		$date_key = $worker_schedule->date_key;
-		$date_str = substr($date_key,0,4)."年".substr($date_key,4,2)."月".substr($date_key,-2)."日";
-		//ディナー／ランチ区分
-		if($worker_schedule->noon_flag == 1){
-    		$meal_type_str = "ランチ";
-    		$price = $worker->price_lunch;
-    		$visit_time = array('11:00' =>'11:00', '12:00' =>'12:00', '13:00' =>'13:00', '14:00' =>'14:00', '15:00' =>'15:00');
-		}else{
-    		$meal_type_str = "ディナー";
-    		$price = $worker->price_dinner;
-    		$visit_time = array('17:00' =>'17:00', '18:00' =>'18:00', '19:00' =>'19:00', '20:00' =>'20:00', '21:00' =>'21:00');
-		}
-
-		//価格を成型
-		$price_str = $price ? "￥".number_format($price) : "指定なし";
+		// 成型されたスケジュール情報を取得
+		$schedule_info = $worker_schedule->scheduleInfo();
+		
+		// 訪問時間の選択リスト
+		$visit_time = ($worker_schedule->noon_flag == 1) ?
+			array('11:00' =>'11:00', '12:00' =>'12:00', '13:00' =>'13:00', '14:00' =>'14:00', '15:00' =>'15:00') :
+			array('17:00' =>'17:00', '18:00' =>'18:00', '19:00' =>'19:00', '20:00' =>'20:00', '21:00' =>'21:00');
 
 		return view('users.reserve.create', [
 			"worker_schedule" => $worker_schedule,
 			"worker" => $worker,
-			"date_str" => $date_str,
-			"meal_type_str" => $meal_type_str,
-			"price_str" => $price_str,
-			"price" => $price,
+			"date_str" => $schedule_info["date_jp"],
+			"meal_type_str" => $schedule_info["meal_type"],
+			"price_str" => $schedule_info["price_str"],
+			"price" => $schedule_info["price"],
 			"visit_time" => $visit_time,
 		]);
     }
@@ -63,7 +54,7 @@ class UserReservationsController extends Controller
      */
     public function store(Request $request)
     {
-    	// 予約済みのidは不可
+    	// 予約済みのidは不可（予約確認中に他者に先約された場合等）
 		if( $request->user()->userReservations()->where("worker_schedule_id",$request->worker_schedule_id)->first() ){
             return view('error', ["message" => '申し訳ございません。指定されたスケジュールは予約済みのため、お手続きができません。', "return_url" => "/home" ]);
 		}
@@ -72,12 +63,15 @@ class UserReservationsController extends Controller
             'message' => 'max:1000',
         ]);
         
-       $request->user()->userReservations()->create([
+		$user_reservation = $request->user()->userReservations()->create([
             'worker_schedule_id' => $request->worker_schedule_id,
             'visit_time' => $request->visit_time,
             'message' => $request->message,
             'price' => $request->price,
         ]);
+        
+        // 予約発生通知メール送信
+        Mail::send(new \App\Mail\ReserveMail($user_reservation));
 
         return redirect('/home');
         
@@ -100,23 +94,16 @@ class UserReservationsController extends Controller
 		$visit_time = $user_reservation->visit_time;
 		$visit_time_str = $visit_time ? substr($visit_time, 0, 5) : "指定なし";
 
-		//予約日を成型
-		$date_key = $worker_schedule->date_key;
-		$date_str = substr($date_key,0,4)."年".substr($date_key,4,2)."月".substr($date_key,-2)."日";
-		//ディナー／ランチ区分
-		if($worker_schedule->noon_flag == 1){
-    		$meal_type_str = "ランチ";
-		}else{
-    		$meal_type_str = "ディナー";
-		}
+		// 成型されたスケジュール情報を取得
+		$schedule_info = $worker_schedule->scheduleInfo();
 
 		return view('users.reserve.edit', [
 			"user_reservation" => $user_reservation,
 			"worker_schedule" => $worker_schedule,
 			"worker" => $worker,
-			"date_str" => $date_str,
-			"meal_type_str" => $meal_type_str,
-			"price_str" => $price_str,
+			"date_str" => $schedule_info["date_jp"],
+			"meal_type_str" => $schedule_info["meal_type"],
+			"price_str" => $schedule_info["price_str"],
 			"visit_time_str" => $visit_time_str,
 		]);
     }
@@ -126,10 +113,17 @@ class UserReservationsController extends Controller
      */
     public function destroy($id)
     {
-	    $user_reservation = UserReservation::findOrFail($id);
-	    
-	    $user_reservation->delete();
-	    
-	    return redirect('/home');
+		// キャンセル理由を直接取得（destroyではrequestが取得できないため）
+		$cancel_reason = $_POST["cancel_reason"];
+		if(!$cancel_reason) return back()->withStatus("キャンセル理由を入力してください。");
+		
+		$user_reservation = UserReservation::findOrFail($id);
+		
+		// 予約キャンセル通知メール送信
+		Mail::send(new \App\Mail\ReserveCancelMail($user_reservation, $cancel_reason));
+		
+		$user_reservation->delete();
+		
+		return redirect('/home');
     }
 }

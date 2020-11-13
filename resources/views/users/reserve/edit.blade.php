@@ -2,13 +2,18 @@
 @section('content')
 <div class="container">
    <div class="row justify-content-center">
-      <div class="col-md-10">
+      <div class="col-md-11">
          <div class="card">
             {!! Form::open(['route' => ['users.reserve.destroy', $user_reservation->id], 'method' => 'delete']) !!}
             <div class="card-header">
                シェフ出張予約キャンセル
             </div>
             <div class="card-body">
+               @if (session('status'))
+                  <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+               @endif
+               @include('commons.error_messages')
+
                <h5 class="text-danger">本当に下記の予約をキャンセルしますか？</h5>
                <ul>
                      <li>予約日：{{ $date_str }} 【{{$meal_type_str}}】 <small>{{ $worker_schedule->comment }}</small></li>
@@ -18,15 +23,11 @@
                </ul>
 
                <div class="card">
-                  <div class="card-header">
-                     シェフのプロフィール
-               	</div>
+                  <div class="card-header"><i class="fas fa-smile text-info">シェフ：</i> {{ $worker->nickname }} さん</div>
                   <div class="card-body">
-                     <ul>
-                        <li>ニックネーム：{{ $worker->nickname }}</li>
-                        <li>ランチ：{{ $worker->price_lunch }}</li>
-                        <li>ディナー：{{ $worker->price_dinner }}</li>
-                     </ul>
+                     
+                     @include('commons.worker_profile_body')
+                     
                	</div>
                </div>
                <br />

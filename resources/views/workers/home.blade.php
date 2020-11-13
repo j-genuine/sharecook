@@ -14,9 +14,9 @@
                     @endif
                     @include('commons.error_messages')
 
-                    <h5 class="my-3 p-2 shadow">■ 現在の予約受付状況</h5>
+                    <h5 class="my-1 p-2 border shadow">■ 現在の予約受付状況</h5>
                     <table class="table table-striped">
-                        <thead class="thead-dark">
+                        <thead>
                             <tr>
                                 <th>日付</th>
                                 <th>区分/希望時間</th>
@@ -48,11 +48,12 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {!! $reserve_pagelinks !!}
                     <div class="text-center">
                     <a href="{{ route('workers.schedule_edit') }}" class="btn btn-info"><i class="fas fa-angle-double-right"></i>スケジュールの確認・登録</a>
                     </div>
                     
-                    <h5 class="my-3 p-2 shadow">■ プロフィール設定 [ <a href="{{ route('workers.setting') }}"> 
+                    <h5 class="my-3 p-2 border shadow">■ プロフィール設定 [ <a href="{{ route('workers.setting') }}"> 
                         @if($worker->public_flag) <span class="font-weight-bold">公開中</span> @else 非公開 @endif </a> ] 
                         <small class="form-check-input ml-3">※★の項目が公開対象</small>
                     </h5>
@@ -114,9 +115,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>★PRコメント：</th>
-                                    <td>
-                                    {{ $worker->comment }}
+                                    <td colspan="2">
+                                     <div class="font-weight-bold">【PRコメント】</div>
+                                     {{ $worker->comment }}
                                     </td>
                                 </tr>
                             </table>
@@ -128,7 +129,7 @@
                         <a href="{{ route('workers.setting') }}" class="btn btn-info"><i class="fas fa-angle-double-right"></i>プロフィール設定変更</a>
                     </div>
  
-                    <h5 class="my-3 p-2 shadow">■ 料理画像設定</h5>
+                    <h5 class="my-3 p-2 border shadow">■ 料理画像設定</h5>
 
                     <div class="text-center">
                         <p>

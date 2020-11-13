@@ -1,7 +1,7 @@
 # authenticate(Basic)
 AuthUserFile /app/public/.htpasswd
 AuthGroupFile /dev/null
-AuthName "当サイトは現在開発中です。確認用（ID:test PW:test）"
+AuthName "当サイトは現在開発中です。"
 AuthType Basic
 require valid-user
 

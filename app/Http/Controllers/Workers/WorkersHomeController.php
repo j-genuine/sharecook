@@ -47,7 +47,7 @@ class WorkersHomeController extends Controller
         // 予約情報を一件毎に、各項目を成型した上で、view渡し用に配列に格納
         $reservations = array();
         $i=0;
-        $user_reservations = UserReservation::workerReservedInfo($worker->id);
+        $user_reservations = UserReservation::workerReservedInfo($worker->id, 5);
         
         foreach ($user_reservations as $reservation){
 
@@ -73,6 +73,7 @@ class WorkersHomeController extends Controller
         return view('workers.home', [
             'worker' => $worker,
             'reservations' => $reservations,
+            'reserve_pagelinks' => $user_reservations->links(),
             'worker_area_name' => $worker_area_name,
             'worker_skill_name' => $worker_skill_name,
         ]);

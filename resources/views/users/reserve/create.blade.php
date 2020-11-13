@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
    <div class="row justify-content-center">
-      <div class="col-md-10">
+      <div class="col-md-11">
          <div class="card">
             {!! Form::open(['route' => 'users.reserve.store']) !!}
             <div class="card-header">
@@ -23,22 +23,18 @@
                </ul>
 
                <div class="card">
-                  <div class="card-header">
-                     シェフのプロフィール
-               	</div>
+                  <div class="card-header"><i class="fas fa-smile text-info">シェフ：</i> {{ $worker->nickname }} さん</div>
                   <div class="card-body">
-                     <ul>
-                        <li>ニックネーム：{{ $worker->nickname }}</li>
-                        <li>ランチ：{{ $worker->price_lunch }}</li>
-                        <li>ディナー：{{ $worker->price_dinner }}</li>
-                     </ul>
+                     
+                     @include('commons.worker_profile_body')
+                     
                	</div>
                </div>
-               ⇒<a href="/workerinfo?wid={{ $worker->id }}">スケジュールを選びなおす</a><br />
                <br />
                {!! Form::hidden('price', $price) !!}
                {!! Form::hidden('worker_schedule_id', $worker_schedule->id) !!}
                {!! Form::submit('■　予約を確定する　■', ['class' => 'btn btn-primary']) !!}
+               <a href="/workerinfo?wid={{ $worker->id }}" class="btn btn-link"><i class="fas fa-angle-double-right"></i> スケジュールを選びなおす</a>
             </div>
             {!! Form::close() !!}
          </div>

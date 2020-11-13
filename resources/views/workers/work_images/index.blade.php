@@ -41,8 +41,12 @@
                          <a href="{{ route('workers.work_images.edit',$work_image->id) }}" class="btn btn-link"><i class="fas fa-edit"></i>変更する</a><br />
                      </td>
                   </tr>
-                   @endforeach
+                  @endforeach
                </table>
+               @if(!isset($work_image))
+               <div class="text-center">登録されている画像がありません。画像を追加して、自慢の手料理をアピールしましょう！</div>
+               @endif
+
                {{ $work_images->links() }}
 
                <a href="{{ route('workers.workers_home') }}" class="btn btn-link"><i class="fas fa-angle-double-right"></i>マイページにもどる</a><br />

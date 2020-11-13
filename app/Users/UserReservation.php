@@ -13,12 +13,14 @@ class UserReservation extends Model
     /**
      * 指定のシェフ会員の予約情報を取得
      * 
-     * @param  id    シェフ会員ID
+     * @param  id (,int paginate)    シェフ会員ID (,ページネーション数)
      * @return array 予約済み予約情報
      */
-    static function workerReservedInfo($worker_id){
+    static function workerReservedInfo($worker_id, $paginate = 0){
         
-        return self::leftjoin('worker_schedules','worker_schedule_id','worker_schedules.id')->where('worker_id',$worker_id)->get();
+        return self::leftjoin('worker_schedules','worker_schedule_id','worker_schedules.id')
+            ->where('worker_id',$worker_id)
+            ->orderBy("date_key","desc")->paginate($paginate);
     }
 
     /**
@@ -26,7 +28,7 @@ class UserReservation extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\User::class);
     }
 
     /**

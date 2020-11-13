@@ -24,7 +24,7 @@ class UserSettingController extends Controller
 
         $request->validate([
 
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:30',
             'phone' => 'required|string|max:13',
             'zip_cd' => 'required|integer|max:9999999',
             'area_id' => 'required|integer|max:999',

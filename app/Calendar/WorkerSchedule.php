@@ -103,6 +103,56 @@ class WorkerSchedule extends Model
 	}
 	
 	/**
+     * 取得や成型が面倒な各種スケジュール情報を、まとめて作成して配列で返す
+     * 
+     * @return array[
+     *		'date'	=> 日付(yyyy/mm/dd),
+     * 		'date_jp'	=> 日付(yyyy年mm月dd日),
+     *		'meal_type'	=> ランチ or ディナー,
+     * 		'comment'	=> スケジュールのコメント,
+     * 		'worker_id'	=> シェフ会員ID,
+     * 		'name'	=> シェフの名前,
+     *		'nickname'	=> シェフのニックネーム,
+     * 		'email'	=> シェフのemail,
+     * 		'price'	=> 価格(数値),
+     *  	'price_str'	=> 価格(カンマ区切り文字。0なら'指定なし'),
+     * 		'phone'	=> シェフの電話番号,
+     * ]
+     */
+	public function scheduleInfo(){
+		
+		$schedule_info = array();
+		$worker = $this->worker()->first();
+		
+		//成型した予約日
+		$date_key = $this->date_key;
+		$schedule_info['date'] = substr($date_key,0,4)."/".substr($date_key,4,2)."/".substr($date_key,-2);
+		$schedule_info['date_jp'] = substr($date_key,0,4)."年".substr($date_key,4,2)."月".substr($date_key,-2)."日";
+		
+		//ディナー／ランチ区分と価格
+		if($this->noon_flag == 1){
+    		$schedule_info['meal_type'] = "ランチ";
+    		$schedule_info['price'] = $worker->price_lunch;
+		}else{
+			$schedule_info['meal_type'] = "ディナー";
+    		$schedule_info['price'] = $worker->price_dinner;
+		}
+
+		//成型した価格
+		$schedule_info['price_str'] = $schedule_info['price'] ? "￥".number_format($schedule_info['price']) : "指定なし";
+		
+		//その他の情報
+		$schedule_info['worker_id'] = $this->worker_id;
+		$schedule_info['comment'] = $this->comment;
+		$schedule_info['name'] = $worker->name;
+		$schedule_info['nickname'] = $worker->nickname;
+		$schedule_info['email'] = $worker->email;
+		$schedule_info['phone'] = $worker->phone;
+		
+		return $schedule_info;	
+	}
+	
+	/**
      * シェフ会員テーブル(Workers)との連結
      */
     public function worker()
