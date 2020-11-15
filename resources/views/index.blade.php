@@ -4,8 +4,12 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="topview container-fluid p-0">
-            <img src="images/top_01.jpg">
-            <div class="row" style="border-top:4px #FF6633 solid;">
+            <div class="row" style="border-bottom:4px #FF6633 solid;">
+                <img src="images/top_01.jpg" class="img-fluid top_pc">
+                <img src="images/top_s.jpg" class="img-fluid top_sp">
+            </div>
+            <div class="row">
+                
                 <div class="top_box1 col-md-6 p-3 text-center font-weight-bold">
                     シェアクックは、料理を作りたい人と<br />
                     作って欲しい人をマッチングするサービスです<br />

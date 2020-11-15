@@ -19,4 +19,23 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+    public function __construct()
+    {
+        $this->middleware('guest:workers');
+    }
+    
+    public function showLinkRequestForm()
+    {
+        return view('workers.auth.passwords.email');
+    }
+    protected function guard()
+    {
+        return \Auth::guard('workers');
+    }
+
+    public function broker()
+    {
+        return \Password::broker('workers');
+    }
 }

@@ -32,7 +32,13 @@ div.card .card-header{
 	color:#063;
 }
 
-
+img.top_pc { display: block !important; }
+img.top_sp { display: none !important; }
+ 
+@media only screen and (max-width: 768px) {
+    img.top_pc { display: none !important; }
+    img.top_sp { display: block !important; }
+}
 
 /* フッタ部 */
 

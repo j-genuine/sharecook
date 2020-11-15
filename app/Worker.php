@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Cloudinary;
+use App\Notifications\WorkerPasswordResetNotification;
 
 class Worker extends Authenticatable
 {
@@ -37,6 +38,14 @@ class Worker extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * パスワードリセット用にオーバーライド
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new WorkerPasswordResetNotification($token));
+    }
 
     /**
      * Cloudinary用のpublic_idを取得

@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Notifications\UserPasswordResetNotification;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -37,6 +39,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * パスワードリセットメールの日本語化用にオーバーライド
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new UserPasswordResetNotification($token));
+    }
     
     /**
      * カスタマー予約テーブル(UserReservations)との連結
