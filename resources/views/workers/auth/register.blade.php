@@ -10,7 +10,7 @@
 
                 <div class="card-body">
                     <div class="row p-3" style="background:#FFFFEE;color:#990;">
-                        <div class="col-md-4 text-center"><img src="/images/chef_1.jpg" width="160"></div>
+                        <div class="col-md-4 text-center"><img src="/images/chef_1.jpg"></div>
                         <div class="col-md-8">
                             あなたの時間を少しだけ使って、誰かのために、料理を作ってみませんか？<br/>
                             謝礼と、そしてたくさんの笑顔がもらえます。<br/>

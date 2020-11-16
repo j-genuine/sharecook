@@ -8,6 +8,17 @@
                 <div class="card-header">新規利用登録</div>
 
                 <div class="card-body">
+                    <div class="row p-3 mb-2" style="background:#FFEEDD;color:#630;">
+                        <div class="col-md-4 text-center"><img src="/images/cuisine_1.jpg"></div>
+                        <div class="col-md-8">
+                            いつもと違う手料理をあなたの家で！<br/>
+                            お気に入りのシェフを見つけたら、下記の情報を入力の上、利用登録してください。<br/>
+                            <div class="text-right">
+                                <a href="workers/register" class="btn btn-link"><i class="fas fa-angle-double-right"></i> シェフとして会員登録したい方はこちら</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
@@ -108,7 +119,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    　登録　
+                                    　利用登録　
                                 </button>
                             </div>
                         </div>

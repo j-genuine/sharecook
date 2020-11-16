@@ -59,7 +59,7 @@
                       <label for="message" class="col-md-3 col-form-label text-md-right">メッセージ</label>
                
                       <div class="col-md-8">
-                          <textarea id="message" class="form-control @error('message') is-invalid @enderror" name="message" rows="8" autocomplete="message">{{ old('message') }}</textarea>
+                          <textarea id="message" class="form-control @error('message') is-invalid @enderror" name="message" rows="8" autocomplete="message" required>{{ old('message') }}</textarea>
                       </div>
                   </div>
                

@@ -25,7 +25,7 @@
                @if(!isset($work_image))
                   <div>投稿されている写真がありません。</div>
                @endif
-                  <div class="text-right small" style="z-index:1;">
+                  <div class="col-md-12 small" style="z-index:1;">
                      {!! $image_page_links !!}
                   </div>
                </div>
