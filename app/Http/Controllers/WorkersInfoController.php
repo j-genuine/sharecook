@@ -17,10 +17,10 @@ class WorkersInfoController extends Controller
    		if($request->skill_id) $sql_where_array["skill_id"] = $request->skill_id;
 
    		//検索条件に合ったシェフ情報を取得   	
-   		$workers = Worker::select("workers.id","nickname","price_lunch","price_dinner","portrait_filename")
+   		$workers = Worker::select("workers.id","nickname","price_lunch","price_dinner","portrait_filename",'workers.updated_at')
    			->leftjoin("worker_skills","worker_skills.worker_id","workers.id")
    			->leftjoin("worker_areas","worker_areas.worker_id","workers.id")
-   			->where($sql_where_array)->groupBy("workers.id")->orderBy('workers.updated_at', 'desc')->paginate(10);
+   			->where($sql_where_array)->distinct()->orderBy('workers.updated_at', 'desc')->paginate(10);
 
    		return view('workers_list', [
             'workers' => $workers,
