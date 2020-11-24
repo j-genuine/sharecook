@@ -10,14 +10,13 @@
     "require": {
         "php": "^7.2",
         "azuyalabs/yasumi": "^2.3",
-        "doctrine/dbal": "^2.12",
+        "doctrine/dbal": "^2.6",
         "fideloper/proxy": "^4.0",
         "jrm2k6/cloudder": "^0.6.0",
         "laravel/framework": "^6.18.35",
         "laravel/tinker": "^2.0",
         "laravel/ui": "1.*",
-        "laravelcollective/html": "^6.0",
-        "league/flysystem-aws-s3-v3": "^1.0"
+        "laravelcollective/html": "^6.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -29,7 +28,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.2"
+        }
     },
     "extra": {
         "laravel": {

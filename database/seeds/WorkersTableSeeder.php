@@ -11,7 +11,7 @@ class WorkersTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 15; $i++) {
 
             \App\Worker::create([
                 'name' => 'テスト料理人'.$i,
@@ -20,10 +20,10 @@ class WorkersTableSeeder extends Seeder
                 'public_flag' => 1, 
                 'phone' => '090'.random_int(10000000, 99999999),
                 'nickname' => 'シェフ'.$i,
-                'price_lunch' => random_int(2,10)*500, 
-                'price_dinner' => random_int(3,15)*500, 
-                'amature_career' => random_int(0,30),
-                'pro_career' => random_int(0,20),
+                'price_lunch' => random_int(2,6)*500, 
+                'price_dinner' => random_int(3,12)*500, 
+                'amature_career' => random_int(0,15),
+                'pro_career' => random_int(0,10),
                 'portrait_filename' => '',
                 'comment' => 'テストコメント', 
             ]);
