@@ -24,8 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // SSL証明書(Let's Encrypt)月次更新
+        $schedule->exec('/usr/local/bin/certbot-auto renew --post-hook "sudo service httpd restart"')
+        	->monthlyOn(25, '3:00')
+        	->appendOutputTo('/var/www/log/certbot_renew.log');
     }
 
     /**
