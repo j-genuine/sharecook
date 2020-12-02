@@ -20,12 +20,14 @@ class WorkersInfoController extends Controller
    		$workers = Worker::select("workers.id","nickname","price_lunch","price_dinner","portrait_filename",'workers.updated_at')
    			->leftjoin("worker_skills","worker_skills.worker_id","workers.id")
    			->leftjoin("worker_areas","worker_areas.worker_id","workers.id")
-   			->where($sql_where_array)->distinct()->orderBy('workers.updated_at', 'desc')->paginate(10);
-
-   		return view('workers_list', [
+			->where($sql_where_array)
+			->groupBy("workers.id","nickname","price_lunch","price_dinner","portrait_filename",'workers.updated_at')
+			->orderBy('workers.updated_at', 'desc')->paginate(10);
+		
+		return view('workers_list', [
             'workers' => $workers,
             'area_id' => $request->area_id,
-            'skill_id' => $request->skill_id,
+			'skill_id' => $request->skill_id,
         ]);
    	
 	}
