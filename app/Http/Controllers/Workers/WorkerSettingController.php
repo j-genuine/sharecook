@@ -151,5 +151,49 @@ class WorkerSettingController extends Controller
 
         return back()->withStatus("プロフィール画像を保存しました");
     }
-    
+
+    /**
+     * シェフ会員退会確認ページ
+     */
+    public function unscribe()
+    {
+        $worker = \Auth::user();
+
+        return view('workers.unscribe', [
+            'worker' => $worker,
+        ]);
+    }
+
+    /**
+     * シェフ会員退会処理
+     */
+    public function destroy(Request $request)
+    {
+        $worker = \Auth::user();
+
+        //メールアドレス入力により誤操作・不正アクセスの簡易チェック
+        if($request->check_str != $worker->email) return back()->withStatus("メールアドレスが登録データと一致しません。");
+
+        //カスタマー予約テーブルのデータ削除
+        $worker_shedule_id = $worker->workerSchedules()->select("id")->get()->pluck("id");
+        \App\Users\UserReservation::whereIn("worker_schedule_id", $worker_shedule_id)->delete();
+
+        //料理画像本体とテーブルのデータ削除
+        foreach($worker->workImages()->get() as $work_image){
+            $work_image->destroyWorkImage();
+            $work_image->delete();
+        }
+
+        //スケジュールテーブル、出張エリアテーブル、得意スキルテーブルのデータ削除
+        $worker->workerSchedules()->delete();
+        $worker->workerAreas()->delete();
+        $worker->workerSkills()->delete();
+
+        //プロフィール画像とシェフ会員テーブルのデータ削除
+        $worker->destroyPortraitImage();
+        \Log::info('Worker Unscribed: '.$worker->id.", ".$worker->name.", ".$worker->nickname.", ".$worker->email.", ".$worker->created_at);
+        $worker->delete();
+
+        return view('workers.unscribe_complete');
+    }
 }

@@ -184,6 +184,9 @@
                             </div>
                         </div>
                     </form>
+                    <div class="text-right">
+                        <a href="{{ route('workers.unscribe') }}" class="btn btn-link"><i class="fas fa-exclamation-circle"></i> 退会を希望される方</a>
+                    </div>
                     <a href="{{ route('workers.workers_home') }}" class="btn btn-link"><i class="fas fa-angle-double-right"></i>マイページにもどる</a><br />
                 </div>
             </div>
