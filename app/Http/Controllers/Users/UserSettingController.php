@@ -54,5 +54,37 @@ class UserSettingController extends Controller
         
         return back()->withStatus("保存しました");
     }
+
+    /**
+     * ユーザー退会確認ページ
+     */
+    public function unscribe()
+    {
+        $user = \Auth::user();
+
+        return view('users.unscribe', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * ユーザ退会処理
+     */
+    public function destroy(Request $request)
+    {
+        $user = \Auth::user();
+
+        //メールアドレス入力により誤操作・不正アクセスの簡易チェック
+        if($request->check_str != $user->email) return back()->withStatus("メールアドレスが登録データと一致しません。");
+
+        //予約テーブルのデータ削除
+        $user->userReservations()->delete();
+
+        //会員テーブルのデータ削除
+        \Log::info('User Unscribed: '.$user->id.", ".$user->name.", ".$user->email.", ".$user->created_at);
+        $user->delete();
+
+        return view('users.unscribe_complete');
+    }
     
 }

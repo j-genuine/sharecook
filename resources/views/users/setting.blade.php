@@ -101,6 +101,9 @@
                             </div>
                         </div>
                     </form>
+                    <div class="text-right">
+                        <a href="{{ route('users.unscribe') }}" class="btn btn-link"><i class="fas fa-exclamation-circle"></i> 退会を希望される方</a>
+                    </div>
                 </div>
             </div>
         </div>

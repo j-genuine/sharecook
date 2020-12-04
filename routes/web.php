@@ -34,6 +34,8 @@ Route::group(['middleware' => ['auth']], function () {
     
         Route::get('/setting', 'UserSettingController@edit')->name("setting");
         Route::post('/setting', 'UserSettingController@update')->name("setting_update");
+        Route::get('/unscribe', 'UserSettingController@unscribe')->name("unscribe");
+        Route::delete('/unscribe', 'UserSettingController@destroy')->name("destroy");
     });
 });
 
