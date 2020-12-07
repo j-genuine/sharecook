@@ -16,7 +16,7 @@ class WorkersHomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verified:workers');
+        $this->middleware('auth:workers');
     }
 
     /**

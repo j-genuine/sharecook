@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_workers')
 
 @section('content')
 <div class="container">
@@ -10,15 +10,18 @@
                 <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
+                            新しい本登録メールが送信されました。
                         </div>
                     @endif
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                    <p>
+                        ご入力頂いたメールアドレスに本登録メールをお送りしました。<br/>
+                        記載されたURLをクリックして登録を完了してください。
+                    </p>
+                    <p>メールが届いていない場合下記ボタンをクリックしてください。</p>
+                    <form class="d-inline" method="POST" action="{{ route('workers.verification.resend') }}">
                         @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">確認メールを再発行</button>
                     </form>
                 </div>
             </div>

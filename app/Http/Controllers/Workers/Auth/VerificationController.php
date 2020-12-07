@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Access\AuthorizationException;
+
 class VerificationController extends Controller
 {
     /*
@@ -26,7 +30,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::WORKERS_HOME;
 
     /**
      * Create a new controller instance.
@@ -35,8 +39,41 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
+        $this->middleware('auth:workers');
+        $this->middleware('signed:workers')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
+
+    public function show(Request $request)
+    {
+        //dd($request->user());
+        return $request->user()->hasVerifiedEmail()
+            ? redirect($this->redirectPath())
+            : view('workers.auth.verify');
+    }
+
+    public function verify(Request $request)
+    {
+        if ($request->route('id') != $request->user()->getKey()) {
+            throw new AuthorizationException;
+        }
+         
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+         
+        return redirect($this->redirectPath())->with('workers.verified', true);
+    }
+
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect($this->redirectPath());
+        }
+         
+        $request->user()->sendEmailVerificationNotification();
+         
+        return back()->with('workers.resent', true);
+    }
+
 }

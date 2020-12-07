@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 /*** Worker領域 ***/
 Route::prefix('workers')->namespace('Workers')->name('workers.')->group(function(){
-    Auth::routes(['verify' => true]);
+    Auth::routes();
     
     Route::get('/home', 'WorkersHomeController@index')->name('workers_home');
 

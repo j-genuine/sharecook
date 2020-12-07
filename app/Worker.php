@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Cloudinary;
 use App\Notifications\WorkerPasswordResetNotification;
+use App\Notifications\WorkerVerifyEmail;
 
 class Worker extends Authenticatable implements MustVerifyEmailContract
 {
@@ -47,6 +48,14 @@ class Worker extends Authenticatable implements MustVerifyEmailContract
     {
         $this->notify(new WorkerPasswordResetNotification($token));
     }
+
+    /**
+     * メール認証用にオーバーライド
+     */
+    //public function sendEmailVerificationNotification()
+    //{
+    //    $this->notify(new WorkerVerifyEmail());
+    //}
 
     /**
      * Cloudinary用のpublic_idを取得
