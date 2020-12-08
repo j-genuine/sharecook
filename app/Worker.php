@@ -2,17 +2,16 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
-use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Cloudinary;
 use App\Notifications\WorkerPasswordResetNotification;
-use App\Notifications\WorkerVerifyEmail;
+//use App\Notifications\WorkerVerifyEmail;
 
-class Worker extends Authenticatable implements MustVerifyEmailContract
+class Worker extends Authenticatable
 {
-    use MustVerifyEmail, Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

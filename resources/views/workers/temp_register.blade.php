@@ -24,11 +24,15 @@
                     @endif
                     @include('commons.error_messages')
                     
+                    <p class="m-4 text-center">
+                    <i class="fas fa-asterisk text-primary"> シェフ会員への登録を希望される方は、まずは下記フォームよりメールアドレスをご送信ください。<br/>
+                        会員本登録のためのURLを自動返信します。</i>
+                    </p>
                     <form method="POST" action="{{ route('workers.temp_store') }}">
                         @csrf
                         
                         <div class="form-group form-row">
-                            <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス <i class="fas fa-asterisk text-primary"></i></label>
+                            <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス</label>
 
                             <div class="col-md-8">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
@@ -38,7 +42,7 @@
                         <div class="form-group row mb-2">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    　登録メールを送信
+                                    メールアドレスを送信 
                                 </button>
                             </div>
                         </div>

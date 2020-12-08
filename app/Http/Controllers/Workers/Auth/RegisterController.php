@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -106,6 +107,9 @@ class RegisterController extends Controller
             if( \App\Skill::find($skill_id) ) $worker->workerSkills()->create(['skill_id' => $skill_id, 'priority_flag' => $i]);
             $i++;
         }
+
+        //仮登録データを削除
+        TempWorker::where('email',$data['email'])->delete();
         
         return $worker;
     }
@@ -114,14 +118,17 @@ class RegisterController extends Controller
      * シェフ本会員登録ページ表示
      * ※RegisterUsers.phpのメソッドをworkers用に上書き
      */
-    public function showRegistrationForm(array $data)
+    public function showRegistrationForm(Request $request)
     {
-        //仮登録者以外はアクセス不可
-        $temp_worker = TempWorker::where('hash',$data['HASH'])->first();
-        if(!isset($temp_worker->email)){
-            $error_msg = $data['HASH'] ? ('メール登録情報が見つかりませんでした。下記をご確認の上、メールを再送信ください。<ul><li>仮登録後24時間が過ぎていないか</li><li>URLが途中で途切れていないか</li></ul>') : "";
-            redirect("/worker/temp_register")->with($error_msg);
-        }
+        //先に仮会員テーブルから有効期限切れデータを削除
+        TempWorker::whereDate('created_at',"<", date("Y-m-d",strtotime("-1 day")))->delete();
+
+        //仮登録者で無い(直接アクセス)なら仮登録ページへリダイレクト
+        if(!isset($request['HASH'])) return redirect("/workers/temp_register");
+        //仮登録Hashが無効な場合はエラーメッセージ付きで仮登録ページへ
+        $temp_worker = TempWorker::where('hash',$request['HASH'])->first();
+        if(!isset($temp_worker->email)) return redirect("/workers/temp_register")
+        ->with('status','メール登録情報が見つかりませんでした。アドレスを再送信してください。（※仮登録後24時間が過ぎていたり、URLが途中で途切れていないかご確認ください）');
 
         //selectボックス用に全エリアIDとエリア名配列を作成
         $area_array = \App\Area::get()->pluck("name","id");
@@ -152,17 +159,17 @@ class RegisterController extends Controller
     /**
      * シェフ会員仮登録処理
      *
-     * @param  array  $data
+     * @param  Request $request
      * @return view
      */
-    protected function tempStore(array $data){
+    protected function tempStore(Request $request){
 
-        $data->validate(['email' => 'required|string|email|max:255|unique:workers']);
+        $request->validate(['email' => 'required|string|email|max:255|unique:workers']);
 
-        //シェフ仮会員テーブルから一日前以上のデータを削除後、レコード作成
+        //シェフ仮会員テーブルから一日以上前のデータを削除後、レコード作成
         TempWorker::whereDate('created_at',"<", date("Y-m-d",strtotime("-1 day")))->delete();
         $temp_worker = TempWorker::create([
-            'email' => $data['email'],
+            'email' => $request['email'],
             'hash' => sha1(uniqid(mt_rand(), true)),    //照合用のハッシュキー生成
         ]);
 

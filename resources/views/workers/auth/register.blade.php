@@ -9,14 +9,14 @@
                 <div class="card-header">シェフ会員登録</div>
 
                 <div class="card-body">
-                    <div class="row p-3" style="background:#FFFFEE;color:#990;">
-                        <div class="col-md-4 text-center"><img src="/images/chef_1.jpg"></div>
+                    <div class="row p-3" style="background:#FFFFEE;color:#360;">
                         <div class="col-md-8">
-                            あなたの時間を少しだけ使って、誰かのために、料理を作ってみませんか？<br/>
-                            謝礼と、そしてたくさんの笑顔がもらえます。<br/>
+                            メールアドレスの確認ができました。<br/>
+                            あと少しです<i class="fas fa-pen"></i><br/>
                             <br/>
-                            料理人としての経験が無くても、情熱のある方ならどなたでも登録OKです。
+                            下記の情報を入力の上「登録」ボタンを押して、会員登録を完了してください。<br/>
                         </div>
+                        <div class="col-md-4 text-center"><img src="/images/chef_1.jpg"></div>
                     </div>
                     
                     @if (session('status'))
@@ -48,8 +48,8 @@
                             <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス</label>
 
                             <div class="col-md-8">
-                                {{ $email }}
-                                <input id="email" type="hiden" name="email" value="{{ $email }}">
+                                <h5 class="mt-2 ml-2 text-primary">{{ $email }}</h5>
+                                <input id="email" type="hidden" name="email" value="{{ $email }}">
                             </div>
                         </div>
 
