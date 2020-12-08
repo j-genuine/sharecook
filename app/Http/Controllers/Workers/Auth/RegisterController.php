@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Workers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Worker;
+use App\Workers\TempWorker;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -109,10 +110,19 @@ class RegisterController extends Controller
         return $worker;
     }
     
-    /* RegisterUsers.phpのメソッドをworkers用に上書き */
-    // view変更
-    public function showRegistrationForm()
+    /**
+     * シェフ本会員登録ページ表示
+     * ※RegisterUsers.phpのメソッドをworkers用に上書き
+     */
+    public function showRegistrationForm(array $data)
     {
+        //仮登録者以外はアクセス不可
+        $temp_worker = TempWorker::where('hash',$data['HASH'])->first();
+        if(!isset($temp_worker->email)){
+            $error_msg = $data['HASH'] ? ('メール登録情報が見つかりませんでした。下記をご確認の上、メールを再送信ください。<ul><li>仮登録後24時間が過ぎていないか</li><li>URLが途中で途切れていないか</li></ul>') : "";
+            redirect("/worker/temp_register")->with($error_msg);
+        }
+
         //selectボックス用に全エリアIDとエリア名配列を作成
         $area_array = \App\Area::get()->pluck("name","id");
         //同様に全スキルIDとスキル名も
@@ -121,6 +131,7 @@ class RegisterController extends Controller
         return view('workers.auth.register', [
             'area_array' => $area_array,
             'skill_array' => $skill_array,
+            'email' => $temp_worker->email,
         ]);
     }
     // guard変更
@@ -128,5 +139,39 @@ class RegisterController extends Controller
         return Auth::guard('workers');
     }
     
-    
+    /**
+     * シェフ会員仮登録（メール送信）ページ表示
+     *
+     * @return view
+     */
+    protected function tempCreate(){
+
+        return view('workers.temp_register');
+    }
+
+    /**
+     * シェフ会員仮登録処理
+     *
+     * @param  array  $data
+     * @return view
+     */
+    protected function tempStore(array $data){
+
+        $data->validate(['email' => 'required|string|email|max:255|unique:workers']);
+
+        //シェフ仮会員テーブルから一日前以上のデータを削除後、レコード作成
+        TempWorker::whereDate('created_at',"<", date("Y-m-d",strtotime("-1 day")))->delete();
+        $temp_worker = TempWorker::create([
+            'email' => $data['email'],
+            'hash' => sha1(uniqid(mt_rand(), true)),    //照合用のハッシュキー生成
+        ]);
+
+        //本登録お知らせメール送信
+        Mail::send(new \App\Mail\TempRegister($temp_worker));
+
+        return view('workers.temp_register_complete', [
+            'temp_worker' => $temp_worker,
+        ]);
+    }
+
 }

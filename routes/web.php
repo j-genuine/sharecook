@@ -44,6 +44,8 @@ Route::prefix('workers')->namespace('Workers')->name('workers.')->group(function
     Auth::routes();
     
     Route::get('/home', 'WorkersHomeController@index')->name('workers_home');
+    Route::get('/temp_register', 'Auth\RegisterController@tempCreate')->name('temp_create');
+    Route::post('/temp_register', 'Auth\RegisterController@tempStore')->name('temp_store');
 
     Route::group(['middleware' => ['auth:workers']], function () {
         Route::get('/schedule_edit', 'WorkerScheduleController@form')->name("schedule_edit");

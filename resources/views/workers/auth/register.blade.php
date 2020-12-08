@@ -45,10 +45,11 @@
                         </div>
 
                         <div class="form-group form-row">
-                            <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス <i class="fas fa-asterisk text-primary"></i></label>
+                            <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス</label>
 
                             <div class="col-md-8">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                {{ $email }}
+                                <input id="email" type="hiden" name="email" value="{{ $email }}">
                             </div>
                         </div>
 
