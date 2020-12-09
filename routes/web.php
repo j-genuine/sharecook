@@ -54,6 +54,9 @@ Route::prefix('workers')->namespace('Workers')->name('workers.')->group(function
         Route::get('/setting', 'WorkerSettingController@edit')->name("setting");
         Route::post('/setting', 'WorkerSettingController@update')->name("setting_update");
         Route::post('/image_store', 'WorkerSettingController@storeImage')->name("image_store");
+        Route::get('/email_change', 'WorkerSettingController@emailChangeForm')->name("email_change");
+        Route::post('/email_change', 'WorkerSettingController@emailTempUpdate')->name("email_temp_update");
+        Route::get('/email_update', 'WorkerSettingController@emailUpdate')->name("email_update");
         Route::get('/unscribe', 'WorkerSettingController@unscribe')->name("unscribe");
         Route::delete('/unscribe', 'WorkerSettingController@destroy')->name("destroy");
         

@@ -48,7 +48,8 @@
                             <label for="email" class="col-md-3 col-form-label text-md-right">メールアドレス</label>
 
                             <div class="col-md-8">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $worker->email }}" required autocomplete="email">
+                                <span class="m-2">{{ $worker->email }}</span>
+                                <a href="{{ route('workers.email_change') }}" class="btn btn-light"><i class="fas fa-angle-double-right"></i>メールアドレスを変更</a>
                             </div>
                         </div>
 

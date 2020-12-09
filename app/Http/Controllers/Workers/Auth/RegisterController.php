@@ -109,7 +109,7 @@ class RegisterController extends Controller
         }
 
         //仮登録データを削除
-        TempWorker::where('email',$data['email'])->delete();
+        TempWorker::clean($data['email']);
         
         return $worker;
     }
@@ -121,7 +121,7 @@ class RegisterController extends Controller
     public function showRegistrationForm(Request $request)
     {
         //先に仮会員テーブルから有効期限切れデータを削除
-        TempWorker::whereDate('created_at',"<", date("Y-m-d",strtotime("-1 day")))->delete();
+        TempWorker::clean();
 
         //仮登録者で無い(直接アクセス)なら仮登録ページへリダイレクト
         if(!isset($request['HASH'])) return redirect("/workers/temp_register");
@@ -166,12 +166,8 @@ class RegisterController extends Controller
 
         $request->validate(['email' => 'required|string|email|max:255|unique:workers']);
 
-        //シェフ仮会員テーブルから一日以上前のデータを削除後、レコード作成
-        TempWorker::whereDate('created_at',"<", date("Y-m-d",strtotime("-1 day")))->delete();
-        $temp_worker = TempWorker::create([
-            'email' => $request['email'],
-            'hash' => sha1(uniqid(mt_rand(), true)),    //照合用のハッシュキー生成
-        ]);
+        //シェフ仮会員テーブルにレコード作成
+        $temp_worker = TempWorker::store($request['email']);
 
         //本登録お知らせメール送信
         Mail::send(new \App\Mail\TempRegister($temp_worker));

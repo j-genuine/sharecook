@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Workers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Worker;
+use App\Workers\TempWorker;
+
 
 class WorkerSettingController extends Controller
 {
@@ -69,10 +72,10 @@ class WorkerSettingController extends Controller
         ]);
         
         //メールアドレスの変更があれば、ユニークチェック
-        if($request->email != $worker->email){
-            $request->validate(['email' => 'required|string|email|max:255|unique:workers']);
-            $worker->email = $request->email;
-        }
+        //if($request->email != $worker->email){
+        //    $request->validate(['email' => 'required|string|email|max:255|unique:workers']);
+        //    $worker->email = $request->email;
+        //}
         
         //パスワードの入力（変更意図）があれば、チェックと更新
         if($request->password){
@@ -150,6 +153,66 @@ class WorkerSettingController extends Controller
         $worker->save();
 
         return back()->withStatus("プロフィール画像を保存しました");
+    }
+
+    /**
+     * メールアドレス変更（メール送信フォーム）ページ表示
+     *
+     * @return view
+     */
+    protected function emailChangeForm(){
+
+        return view('workers.email_change');
+    }
+
+    /**
+     * メールアドレス変更仮登録（メール送信）処理
+     *
+     * @param  Request $request
+     * @return redirect
+     */
+    protected function emailTempUpdate(Request $request){
+
+        $request->validate(['email' => 'required|string|email|max:255|unique:workers']);
+
+        //シェフ仮会員テーブルにレコード作成
+        $temp_worker = TempWorker::store($request['email']);
+
+        //登録お知らせメール送信
+        Mail::send(new \App\Mail\WorkerEmailUpdate($temp_worker));
+
+        return back()->withStatus("メールの送信が完了しました。メールに記載されたURLにアクセスし、登録を完了してください。");
+    }
+
+     /**
+     * メールアドレス変更本登録処理
+     *
+     * @param  Request $request
+     * @return redirect
+     */
+    public function emailUpdate(Request $request){
+
+        $worker = \Auth::user();
+        
+        //Hashが無ければ、メール変更ページへリダイレクト
+        if(!isset($request['HASH'])) return redirect("/workers/email_change");
+        //仮登録Hashが無効な場合はエラーメッセージ付きでメール変更ページへ
+        $temp_worker = TempWorker::where('hash',$request['HASH'])->first();
+        if(!isset($temp_worker->email)) return redirect("/workers/email_change")
+        ->withStatus('メール登録情報が見つかりませんでした。アドレスを再送信してください。（※仮登録後24時間が過ぎていたり、URLが途中で途切れていないかご確認ください）');
+
+        //一応重複登録をしていないかチェック
+        if( Worker::where('email',$temp_worker->email)->first() ) return redirect("/workers/email_change")
+        ->withStatus('送信されたメールアドレスは既に使用されています。');
+        
+        //emailを更新
+        $worker->email = $temp_worker->email;
+        $worker->save();
+
+        //仮会員テーブルからデータを削除
+        TempWorker::clean($temp_worker->email);
+
+        return redirect("/workers/setting")->withStatus("メールアドレスの変更が完了しました。");
     }
 
     /**
