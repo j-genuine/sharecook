@@ -11,7 +11,7 @@ class WorkerSchedule extends Model
 	protected $table = "worker_schedules";
 	
 	protected $fillable = [
-		"comment",
+		'worker_id', 'date_key', 'noon_flag', "comment",
 	];
 	function isLunchClose(){
 		return $this->noon_flag != WorkerSchedule::LUNCH_OK;

@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+
+        Commands\RegisterSampleWorkerSchedule::class,
     ];
 
     /**
@@ -27,7 +28,10 @@ class Kernel extends ConsoleKernel
         // SSL証明書(Let's Encrypt)月次更新
         $schedule->exec('/usr/local/bin/certbot-auto renew --post-hook "sudo service httpd restart"')
         	->monthlyOn(25, '3:00')
-        	->appendOutputTo('/var/www/log/certbot_renew.log');
+            ->appendOutputTo('/var/www/log/certbot_renew.log');
+            
+        // デモ用としてシェフ会員の稼働スケジュールを自動生成する
+        $schedule->command('sampledata:workerschedule')->dailyAt('22:00');
     }
 
     /**
