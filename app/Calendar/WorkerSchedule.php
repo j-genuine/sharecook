@@ -43,43 +43,51 @@ class WorkerSchedule extends Model
 
 		foreach($input as $date_key => $array){
 			
-			// 予約済みフラグ初期化
+			// 稼働状況変更フラグ初期化
 			$lunch_nochange_flag=0;
 			$dinner_nochange_flag=0;
 
-			if(isset($workerSchedules[$date_key])){	//その日付で既に予約がある場合
+			if(isset($workerSchedules[$date_key])){	//その日付で既にレコードがある場合
 
 				// 1日にランチ、ディナー、もしくは両方のレコードがあるためループ
 				foreach($workerSchedules[$date_key] as $key => $workerSchedules_1day){
 
-					// 予約登録済みでチェックが入っていれば無視、外されていたら予約削除
-					switch($noon_flag = $workerSchedules_1day['noon_flag']){
+					$noon_flag = $workerSchedules_1day['noon_flag'];
+					$workerSchedule = WorkerSchedule::where([["date_key", "=", $date_key],["worker_id", "=", $worker_id],["noon_flag", "=", $noon_flag]]);
+
+					// 既にカスタマー予約があれば処理しない(※予約ありの場合、フォームがdisableのためデータが送られてこないので以下をスキップ)
+					if($workerSchedule->first()->userReservation()->first()){
+						continue;
+					}
+
+					// 稼働可能登録済みでチェックが入っていれば無視、外されていたら登録削除
+					switch($noon_flag){
 						case 1:
-							if($input[$date_key]['lunch_comment'] || isset($workerSchedules_1day['comment'])){	// コメント入力があるか、元々あったら更新
-								WorkerSchedule::where([["date_key", "=", $date_key],["worker_id", "=", $worker_id],["noon_flag", "=", $noon_flag]])->update(['comment' => $input[$date_key]['lunch_comment']]);
+							if(isset($input[$date_key]['lunch_comment']) || isset($workerSchedules_1day['comment'])){	// コメント入力があるか、元々あったら更新
+								$workerSchedule->update(['comment' => $input[$date_key]['lunch_comment']]);
 							}
 							if(isset($input[$date_key]['lunch_flag'])){	// チェックボックス（ランチ）
 								$lunch_nochange_flag = 1;
 							}else{
-								WorkerSchedule::where([["date_key", "=", $date_key],["worker_id", "=", $worker_id],["noon_flag", "=", $noon_flag]])->delete();
+								$workerSchedule->delete();
 							}
 							break;
 						case 2:
-							if($input[$date_key]['dinner_comment'] || isset($workerSchedules_1day['comment'])){	// コメント入力があるか、元々あったら更新
-								WorkerSchedule::where([["date_key", $date_key],["worker_id", $worker_id],["noon_flag", $noon_flag]])->update(['comment' => $input[$date_key]['dinner_comment']]);
+							if(isset($input[$date_key]['dinner_comment']) || isset($workerSchedules_1day['comment'])){	// コメント入力があるか、元々あったら更新
+								$workerSchedule->update(['comment' => $input[$date_key]['dinner_comment']]);
 							}
 							if(isset($input[$date_key]['dinner_flag'])){	// チェックボックス（ディナー）
 								$dinner_nochange_flag = 1;
 							}else{
-								WorkerSchedule::where([["date_key", "=", $date_key],["worker_id", "=", $worker_id],["noon_flag", "=", $noon_flag]])->delete();
+								$workerSchedule->delete();
 							}
 							break;
 					}
 				}
 			}
 
-			// 新規の予約
-			// ※ランチにチェックがあり予約済みで無ければ、1予約レコード作成
+			// 新規の稼働可能登録
+			// ※ランチにチェックがあり登録済みで無ければ、1レコード作成
 			if(isset($input[$date_key]['lunch_flag']) && !$lunch_nochange_flag){
 				$workerSchedule = new WorkerSchedule();
 				$workerSchedule->date_key = $date_key;
@@ -89,7 +97,7 @@ class WorkerSchedule extends Model
 				
 				$workerSchedule->save();
 			}
-			// ※ディナーにチェックがあり予約済みで無ければ、1予約レコード作成
+			// ※ディナーにチェックがあり登録済みで無ければ、1レコード作成
 			if(isset($input[$date_key]['dinner_flag']) && !$dinner_nochange_flag){
 				$workerSchedule = new WorkerSchedule();
 				$workerSchedule->date_key = $date_key;
@@ -124,7 +132,7 @@ class WorkerSchedule extends Model
 		$schedule_info = array();
 		$worker = $this->worker()->first();
 		
-		//成型した予約日
+		//成型した可能可能登録日
 		$date_key = $this->date_key;
 		$schedule_info['date'] = substr($date_key,0,4)."/".substr($date_key,4,2)."/".substr($date_key,-2);
 		$schedule_info['date_jp'] = substr($date_key,0,4)."年".substr($date_key,4,2)."月".substr($date_key,-2)."日";

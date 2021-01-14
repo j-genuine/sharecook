@@ -40,6 +40,13 @@ class WorkersInfoController extends Controller
 
 		// worker_idがあればインスタンス生成
 		$worker = Worker::findOrFail($worker_id);
+
+		// 非公開に設定している場合、予約があるworker以外は表示不可
+		if(!$worker->public_flag){
+			\App\Users\UserReservation::select("user_reservations.id")
+				->leftjoin("worker_schedules","worker_schedules.id","=","worker_schedule_id")
+				->where("worker_id",$worker_id)->firstOrFail();
+		}
 		
 		// 料理画像インスタンス生成
 		$work_images = $worker->workImages()->orderBy("created_at","desc")->paginate(3);
