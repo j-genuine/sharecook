@@ -6,11 +6,9 @@
 .env
 .env.backup
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
 npm-debug.log
 yarn-error.log
 
 /public/.htaccess
-/public/.htpasswd
+.htpasswd
 /public/phpinfo.php

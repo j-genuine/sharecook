@@ -1,6 +1,6 @@
 # authenticate(Basic)
 #AuthUserFile /app/public/.htpasswd
-AuthUserFile /var/www/sharecook/public/.htpasswd
+AuthUserFile /app/.htpasswd
 AuthGroupFile /dev/null
 AuthName "当サイトは現在開発中です。"
 AuthType Basic
